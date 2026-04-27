@@ -24,6 +24,8 @@
 		8A3F40982BD9000300A11001 /* AppPreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40972BD9000300A11001 /* AppPreferenceStore.swift */; };
 		8A3F409A2BD9000300A11001 /* UserDefaultsAppPreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40992BD9000300A11001 /* UserDefaultsAppPreferenceStore.swift */; };
 		8A3F409C2BD9000300A11001 /* LocalCacheStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F409B2BD9000300A11001 /* LocalCacheStore.swift */; };
+		8A3F409E2BD9000400A11001 /* BirdDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F409D2BD9000400A11001 /* BirdDetection.swift */; };
+		8A3F40A02BD9000400A11001 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F409F2BD9000400A11001 /* FeedViewModel.swift */; };
 		8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5D2BD8000100A11001 /* FeedView.swift */; };
 		8A3F3F632BD8000100A11001 /* SpeciesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */; };
 		8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F682BD8000100A11001 /* StatsView.swift */; };
@@ -51,6 +53,8 @@
 		8A3F40972BD9000300A11001 /* AppPreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferenceStore.swift; sourceTree = "<group>"; };
 		8A3F40992BD9000300A11001 /* UserDefaultsAppPreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsAppPreferenceStore.swift; sourceTree = "<group>"; };
 		8A3F409B2BD9000300A11001 /* LocalCacheStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCacheStore.swift; sourceTree = "<group>"; };
+		8A3F409D2BD9000400A11001 /* BirdDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdDetection.swift; sourceTree = "<group>"; };
+		8A3F409F2BD9000400A11001 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
 		8A3F3F5D2BD8000100A11001 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesView.swift; sourceTree = "<group>"; };
 		8A3F3F682BD8000100A11001 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 			children = (
 				8A3F407A2BD9000100A11001 /* StationProfile.swift */,
 				8A3F407B2BD9000100A11001 /* StationConnectionStatus.swift */,
+				8A3F409D2BD9000400A11001 /* BirdDetection.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -165,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				8A3F3F5D2BD8000100A11001 /* FeedView.swift */,
+				8A3F409F2BD9000400A11001 /* FeedViewModel.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -279,6 +285,7 @@
 				8A3F40942BD9000300A11001 /* AppConfiguration.swift in Sources */,
 				8A3F40812BD9000100A11001 /* StationProfile.swift in Sources */,
 				8A3F40822BD9000100A11001 /* StationConnectionStatus.swift in Sources */,
+				8A3F409E2BD9000400A11001 /* BirdDetection.swift in Sources */,
 				8A3F40832BD9000100A11001 /* BirdNETGoAPIClient.swift in Sources */,
 				8A3F40842BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift in Sources */,
 				8A3F40852BD9000100A11001 /* StationProfileStore.swift in Sources */,
@@ -290,6 +297,7 @@
 				8A3F409C2BD9000300A11001 /* LocalCacheStore.swift in Sources */,
 				8A3F40912BD9000200A11001 /* StationViewModel.swift in Sources */,
 				8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */,
+				8A3F40A02BD9000400A11001 /* FeedViewModel.swift in Sources */,
 				8A3F3F632BD8000100A11001 /* SpeciesView.swift in Sources */,
 				8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */,
 				8A3F3F6B2BD8000100A11001 /* StationView.swift in Sources */,

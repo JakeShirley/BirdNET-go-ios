@@ -77,6 +77,13 @@ struct URLSessionBirdNETGoAPIClient: BirdNETGoAPIClient {
         return try decoder.decode(StationAuthStatus.self, from: data)
     }
 
+    func recentDetections(station: StationProfile, limit: Int) async throws -> [BirdDetection] {
+        let queryItems = [URLQueryItem(name: "limit", value: "\(limit)")]
+        let (data, response) = try await perform(request(station: station, path: "api/v2/detections/recent", queryItems: queryItems))
+        try validate(response: response, data: data)
+        return try decoder.decode([BirdDetection].self, from: data)
+    }
+
     private func completeLoginRedirect(_ redirectURL: String, station: StationProfile) async throws {
         let callbackURL: URL
         if let absoluteURL = URL(string: redirectURL), absoluteURL.scheme != nil {
@@ -93,8 +100,12 @@ struct URLSessionBirdNETGoAPIClient: BirdNETGoAPIClient {
         }
     }
 
-    private func request(station: StationProfile, path: String, method: String = "GET", csrfToken: String? = nil, body: Data? = nil) -> URLRequest {
-        var request = URLRequest(url: station.baseURL.appending(path: path))
+    private func request(station: StationProfile, path: String, method: String = "GET", queryItems: [URLQueryItem] = [], csrfToken: String? = nil, body: Data? = nil) -> URLRequest {
+        let url = station.baseURL.appending(path: path)
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        components?.queryItems = queryItems.isEmpty ? nil : queryItems
+
+        var request = URLRequest(url: components?.url ?? url)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 

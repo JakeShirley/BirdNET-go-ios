@@ -110,7 +110,7 @@ The active station profile and app preferences are persisted with `UserDefaults`
 The iOS app keeps foundation code in separate source areas so feature work can grow without mixing concerns:
 
 - `BirdNETGo/App`: SwiftUI app entry point, tab shell, app configuration, and dependency environment wiring.
-- `BirdNETGo/Domain`: shared app models and domain state.
+- `BirdNETGo/Domain`: shared app models, detection DTOs, and domain state.
 - `BirdNETGo/Networking`: BirdNET-Go API client protocols and URLSession implementations.
 - `BirdNETGo/Storage`: storage protocols, UserDefaults-backed profile/preference persistence, local cache storage, and Keychain-backed credential storage.
-- `BirdNETGo/Features`: user-facing SwiftUI feature modules such as Feed, Species, Stats, and Station.
+- `BirdNETGo/Features`: user-facing SwiftUI feature modules such as Feed, Species, Stats, and Station. Feature view models own screen state and call dependencies through `AppEnvironment`.
