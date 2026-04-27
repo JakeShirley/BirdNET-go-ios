@@ -1,20 +1,29 @@
 import SwiftUI
 
 struct AppEnvironment {
+    let configuration: AppConfiguration
     let apiClient: any BirdNETGoAPIClient
     let stationProfileStore: any StationProfileStore
     let credentialStore: any StationCredentialStore
+    let preferenceStore: any AppPreferenceStore
+    let localCacheStore: any LocalCacheStore
 
     static let live = AppEnvironment(
+        configuration: .current(),
         apiClient: URLSessionBirdNETGoAPIClient(),
-        stationProfileStore: InMemoryStationProfileStore(),
-        credentialStore: KeychainStationCredentialStore()
+        stationProfileStore: UserDefaultsStationProfileStore(),
+        credentialStore: KeychainStationCredentialStore(),
+        preferenceStore: UserDefaultsAppPreferenceStore(),
+        localCacheStore: FileSystemLocalCacheStore()
     )
 
     static let preview = AppEnvironment(
+        configuration: .preview,
         apiClient: URLSessionBirdNETGoAPIClient(),
         stationProfileStore: InMemoryStationProfileStore(),
-        credentialStore: KeychainStationCredentialStore()
+        credentialStore: KeychainStationCredentialStore(),
+        preferenceStore: UserDefaultsAppPreferenceStore(key: "preview.preferences", userDefaults: .standard),
+        localCacheStore: FileSystemLocalCacheStore()
     )
 }
 

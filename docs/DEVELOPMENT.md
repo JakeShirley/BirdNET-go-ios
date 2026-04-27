@@ -86,12 +86,31 @@ ci(release): [NO-PLAN] add semantic-release workflow
 - If a change is user-visible, choose `feat`, `fix`, or `perf` instead of hiding it under `chore`.
 - Keep release-impacting changes separate from unrelated documentation or cleanup when practical.
 
+## Debug App Configuration
+
+The app supports debug station configuration through launch arguments and environment variables:
+
+```sh
+xcrun simctl launch --terminate-running-process <device-id> com.jakeshirley.birdnetgo --args -initialTab station -stationURL http://192.168.1.50:8080
+```
+
+Supported debug inputs:
+
+- `-stationURL <url>` or `-debugStationURL <url>`: prefill and override the active station URL for the launch.
+- `BIRDNET_GO_STATION_URL=<url>`: environment equivalent of `-stationURL`.
+- `-useLocalStationProfile`: prefill a local test station profile when no station profile is saved.
+- `-localStationURL <url>`: override the local test profile URL. Defaults to `http://localhost:8080`.
+- `BIRDNET_GO_USE_LOCAL_STATION_PROFILE=1`: environment equivalent of `-useLocalStationProfile`.
+- `BIRDNET_GO_LOCAL_STATION_URL=<url>`: environment equivalent of `-localStationURL`.
+
+The active station profile and app preferences are persisted with `UserDefaults`. Station credentials remain Keychain-only, and session cookies remain ephemeral.
+
 ## App Structure
 
 The iOS app keeps foundation code in separate source areas so feature work can grow without mixing concerns:
 
-- `BirdNETGo/App`: SwiftUI app entry point, tab shell, and dependency environment wiring.
+- `BirdNETGo/App`: SwiftUI app entry point, tab shell, app configuration, and dependency environment wiring.
 - `BirdNETGo/Domain`: shared app models and domain state.
 - `BirdNETGo/Networking`: BirdNET-Go API client protocols and URLSession implementations.
-- `BirdNETGo/Storage`: storage protocols, profile persistence implementations, and Keychain-backed credential storage.
+- `BirdNETGo/Storage`: storage protocols, UserDefaults-backed profile/preference persistence, local cache storage, and Keychain-backed credential storage.
 - `BirdNETGo/Features`: user-facing SwiftUI feature modules such as Feed, Species, Stats, and Station.

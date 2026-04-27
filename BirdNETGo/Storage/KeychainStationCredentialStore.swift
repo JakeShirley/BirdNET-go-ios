@@ -13,7 +13,7 @@ struct KeychainStationCredentialStore: StationCredentialStore {
 
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
-        guard status != errSecItemNotFound else {
+        guard status != errSecItemNotFound, status != errSecMissingEntitlement else {
             return nil
         }
         guard status == errSecSuccess, let data = result as? Data else {
@@ -38,7 +38,7 @@ struct KeychainStationCredentialStore: StationCredentialStore {
 
     func deleteCredentials(for profile: StationProfile) async throws {
         let status = SecItemDelete(baseQuery(for: profile) as CFDictionary)
-        guard status == errSecSuccess || status == errSecItemNotFound else {
+        guard status == errSecSuccess || status == errSecItemNotFound || status == errSecMissingEntitlement else {
             throw KeychainError.unhandledStatus(status)
         }
     }

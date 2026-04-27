@@ -31,7 +31,10 @@ final class StationViewModel: ObservableObject {
         didLoad = true
 
         do {
-            guard let profile = try await environment.stationProfileStore.loadActiveProfile() else {
+            rememberCredentials = try await environment.preferenceStore.loadPreferences().rememberStationCredentials
+
+            let storedProfile = try await environment.stationProfileStore.loadActiveProfile()
+            guard let profile = environment.configuration.stationURLOverride.map(StationProfile.manual(baseURL:)) ?? storedProfile ?? environment.configuration.localNetworkTestProfile else {
                 return
             }
 
@@ -39,6 +42,12 @@ final class StationViewModel: ObservableObject {
             if let credentials = try await environment.credentialStore.loadCredentials(for: profile) {
                 username = credentials.username ?? ""
                 password = credentials.password
+            }
+
+            if environment.configuration.stationURLOverride != nil {
+                setMessage("Using debug station URL override.", kind: .neutral)
+            } else if storedProfile == nil, environment.configuration.localNetworkTestProfile != nil {
+                setMessage("Loaded local test station profile.", kind: .neutral)
             }
         } catch {
             setMessage(error.localizedDescription, kind: .warning)
@@ -82,6 +91,7 @@ final class StationViewModel: ObservableObject {
             let response = try await environment.apiClient.login(station: report.profile, credentials: credentials, csrfToken: report.appConfig.csrfToken)
             let status = try await environment.apiClient.authStatus(station: report.profile)
             authStatus = status
+            try await saveCurrentPreferences(environment: environment)
 
             if response.success && rememberCredentials {
                 try await environment.credentialStore.saveCredentials(credentials, for: report.profile)
@@ -99,6 +109,14 @@ final class StationViewModel: ObservableObject {
             password = ""
             authStatus = StationAuthStatus(authenticated: false, username: nil, method: nil)
             setMessage("Logged out.", kind: .success)
+        }
+    }
+
+    func savePreferences(environment: AppEnvironment) async {
+        do {
+            try await saveCurrentPreferences(environment: environment)
+        } catch {
+            setMessage(error.localizedDescription, kind: .warning)
         }
     }
 
@@ -142,6 +160,10 @@ final class StationViewModel: ObservableObject {
     private func setMessage(_ message: String, kind: StatusKind) {
         statusMessage = message
         statusKind = kind
+    }
+
+    private func saveCurrentPreferences(environment: AppEnvironment) async throws {
+        try await environment.preferenceStore.savePreferences(AppPreferences(rememberStationCredentials: rememberCredentials))
     }
 }
 

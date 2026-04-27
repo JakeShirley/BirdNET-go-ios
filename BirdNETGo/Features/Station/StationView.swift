@@ -49,6 +49,9 @@ struct StationView: View {
                         .textContentType(.password)
 
                     Toggle("Save in Keychain", isOn: $viewModel.rememberCredentials)
+                        .onChange(of: viewModel.rememberCredentials) {
+                            Task { await viewModel.savePreferences(environment: appEnvironment) }
+                        }
 
                     Button {
                         Task { await viewModel.logIn(environment: appEnvironment) }
