@@ -17,6 +17,14 @@ struct DetectionDetailView: View {
             } else if let detection = viewModel.detection {
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
+                        if let station = viewModel.stationProfile {
+                            SpeciesImageView(
+                                imageURL: appEnvironment.apiClient.speciesImageURL(station: station, scientificName: detection.scientificName),
+                                commonName: detection.commonName,
+                                attribution: viewModel.speciesImageAttribution
+                            )
+                        }
+
                         Text(detection.commonName)
                             .font(.title2.weight(.semibold))
                         Text(detection.scientificName)
@@ -101,6 +109,92 @@ private struct DetailRow: View {
             Text(value)
                 .multilineTextAlignment(.trailing)
         }
+    }
+}
+
+private struct SpeciesImageView: View {
+    var imageURL: URL
+    var commonName: String
+    var attribution: SpeciesImageAttribution?
+
+    var body: some View {
+        AsyncImage(url: imageURL) { phase in
+            switch phase {
+            case .empty:
+                ProgressView("Loading species image")
+                    .frame(maxWidth: .infinity)
+                    .aspectRatio(4 / 3, contentMode: .fit)
+            case .success(let image):
+                ZStack(alignment: .bottomTrailing) {
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(maxWidth: .infinity)
+                        .aspectRatio(4 / 3, contentMode: .fill)
+                        .clipped()
+
+                    if let attribution, attribution.hasDisplayableCredit {
+                        SpeciesImageAttributionView(attribution: attribution)
+                            .padding(8)
+                    }
+                }
+            case .failure:
+                Label("Species image unavailable", systemImage: "photo")
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .aspectRatio(4 / 3, contentMode: .fit)
+            @unknown default:
+                EmptyView()
+            }
+        }
+        .background(Color(.secondarySystemGroupedBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .accessibilityLabel("Image of \(commonName)")
+    }
+}
+
+private struct SpeciesImageAttributionView: View {
+    var attribution: SpeciesImageAttribution
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "camera")
+            Text(attribution.displayText)
+                .truncationMode(.tail)
+        }
+        .font(.caption2.weight(.medium))
+        .lineLimit(1)
+        .foregroundStyle(.white)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 5)
+        .background(.black.opacity(0.62), in: Capsule())
+        .accessibilityLabel(attribution.accessibilityLabel)
+    }
+}
+
+private extension SpeciesImageAttribution {
+    var hasDisplayableCredit: Bool {
+        authorName.nonEmptyString != nil || licenseName.nonEmptyString != nil || sourceProvider.nonEmptyString != nil
+    }
+
+    var displayText: String {
+        let primaryCredit = authorName.nonEmptyString ?? sourceProvider.nonEmptyString
+        return [primaryCredit, licenseName.nonEmptyString].compactMap { $0 }.joined(separator: " / ")
+    }
+
+    var accessibilityLabel: String {
+        let parts = [authorName.nonEmptyString, licenseName.nonEmptyString, sourceProvider.nonEmptyString].compactMap { $0 }
+        return "Image credit: \(parts.joined(separator: ", "))"
+    }
+}
+
+private extension Optional where Wrapped == String {
+    var nonEmptyString: String? {
+        guard let value = self?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {
+            return nil
+        }
+
+        return value
     }
 }
 

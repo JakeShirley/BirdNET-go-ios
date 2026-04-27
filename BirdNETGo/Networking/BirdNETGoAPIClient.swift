@@ -10,10 +10,20 @@ protocol BirdNETGoAPIClient: Sendable {
     func recentDetections(station: StationProfile, limit: Int) async throws -> [BirdDetection]
     func detection(station: StationProfile, id: Int) async throws -> BirdDetection
     func audioClipURL(station: StationProfile, detectionID: Int) -> URL
+    func speciesImageURL(station: StationProfile, scientificName: String) -> URL
+    func speciesImageAttribution(station: StationProfile, scientificName: String) async throws -> SpeciesImageAttribution
     func spectrogramURL(station: StationProfile, detectionID: Int, size: String, raw: Bool) -> URL
     func spectrogramStatus(station: StationProfile, detectionID: Int, size: String, raw: Bool) async throws -> SpectrogramStatusEnvelope
     func requestSpectrogramGeneration(station: StationProfile, detectionID: Int, size: String, raw: Bool, csrfToken: String?) async throws -> SpectrogramStatusEnvelope
     func detectionEvents(station: StationProfile) -> AsyncThrowingStream<BirdDetectionStreamEvent, Error>
+}
+
+struct SpeciesImageAttribution: Decodable, Equatable, Sendable {
+    var authorName: String?
+    var authorURL: String?
+    var licenseName: String?
+    var licenseURL: String?
+    var sourceProvider: String?
 }
 
 struct SpectrogramStatusEnvelope: Decodable, Equatable, Sendable {

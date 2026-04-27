@@ -7,6 +7,7 @@ final class DetectionDetailViewModel: ObservableObject {
     @Published private(set) var stationProfile: StationProfile?
     @Published private(set) var audioURL: URL?
     @Published private(set) var autoFetchSpectrograms = AppPreferences.defaults.autoFetchSpectrograms
+    @Published private(set) var speciesImageAttribution: SpeciesImageAttribution?
     @Published private(set) var errorMessage: String?
     @Published private(set) var isLoading = false
 
@@ -39,7 +40,9 @@ final class DetectionDetailViewModel: ObservableObject {
 
             stationProfile = profile
             audioURL = environment.apiClient.audioClipURL(station: profile, detectionID: detectionID)
-            detection = try await environment.apiClient.detection(station: profile, id: detectionID)
+            let detection = try await environment.apiClient.detection(station: profile, id: detectionID)
+            self.detection = detection
+            speciesImageAttribution = await loadSpeciesImageAttribution(station: profile, detection: detection, environment: environment)
             errorMessage = nil
         } catch {
             if detection == nil {
@@ -54,5 +57,13 @@ final class DetectionDetailViewModel: ObservableObject {
         }
 
         return try await environment.stationProfileStore.loadActiveProfile() ?? environment.configuration.localNetworkTestProfile
+    }
+
+    private func loadSpeciesImageAttribution(station: StationProfile, detection: BirdDetection, environment: AppEnvironment) async -> SpeciesImageAttribution? {
+        do {
+            return try await environment.apiClient.speciesImageAttribution(station: station, scientificName: detection.scientificName)
+        } catch {
+            return nil
+        }
     }
 }

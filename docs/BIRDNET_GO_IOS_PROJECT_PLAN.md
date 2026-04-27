@@ -199,7 +199,7 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 | MED-001 | done | Detection detail screen | Feed rows open a detail screen backed by `/detections/:id`, with species, confidence, time, source, clip, and status fields. |
 | MED-002 | done | Audio clip playback | Detail screen builds a station-relative `/audio/:id` URL and plays available clips with `AVPlayer`. |
 | MED-003 | done | Spectrogram display | Detail screen checks `/spectrogram/:id/status`, auto-generates missing spectrograms when the default-on setting is enabled, and overlays audio playback position on the station-relative `/spectrogram/:id` PNG. |
-| MED-004 | not-started | Species image and attribution | Use species image endpoints and show attribution where required. |
+| MED-004 | done | Species image and attribution | Detection detail loads `/media/species-image` by scientific name and shows `/media/species-image/info` author/license attribution when available. |
 | MED-005 | not-started | Weather context | Use `/weather/detection/:id` when available. |
 | MED-006 | not-started | Time-of-day context | Use `/detections/:id/time-of-day`. |
 | MED-007 | not-started | Clip extraction | Auth-only future feature using `/audio/:id/clip`. |

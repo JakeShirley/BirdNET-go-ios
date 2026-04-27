@@ -94,6 +94,19 @@ struct URLSessionBirdNETGoAPIClient: BirdNETGoAPIClient {
         station.baseURL.appending(path: "api/v2/audio/\(detectionID)")
     }
 
+    func speciesImageURL(station: StationProfile, scientificName: String) -> URL {
+        let url = station.baseURL.appending(path: "api/v2/media/species-image")
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        components?.queryItems = speciesImageQueryItems(scientificName: scientificName)
+        return components?.url ?? url
+    }
+
+    func speciesImageAttribution(station: StationProfile, scientificName: String) async throws -> SpeciesImageAttribution {
+        let (data, response) = try await perform(request(station: station, path: "api/v2/media/species-image/info", queryItems: speciesImageQueryItems(scientificName: scientificName)))
+        try validate(response: response, data: data)
+        return try decoder.decode(SpeciesImageAttribution.self, from: data)
+    }
+
     func spectrogramURL(station: StationProfile, detectionID: Int, size: String, raw: Bool) -> URL {
         let url = station.baseURL.appending(path: "api/v2/spectrogram/\(detectionID)")
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
@@ -224,6 +237,10 @@ struct URLSessionBirdNETGoAPIClient: BirdNETGoAPIClient {
             URLQueryItem(name: "size", value: size),
             URLQueryItem(name: "raw", value: raw ? "true" : "false")
         ]
+    }
+
+    private func speciesImageQueryItems(scientificName: String) -> [URLQueryItem] {
+        [URLQueryItem(name: "name", value: scientificName)]
     }
 
     private func decodeStreamEvent(_ message: ServerSentEventMessage) throws -> BirdDetectionStreamEvent? {
