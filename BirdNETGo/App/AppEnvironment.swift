@@ -3,15 +3,18 @@ import SwiftUI
 struct AppEnvironment {
     let apiClient: any BirdNETGoAPIClient
     let stationProfileStore: any StationProfileStore
+    let credentialStore: any StationCredentialStore
 
     static let live = AppEnvironment(
         apiClient: URLSessionBirdNETGoAPIClient(),
-        stationProfileStore: InMemoryStationProfileStore()
+        stationProfileStore: InMemoryStationProfileStore(),
+        credentialStore: KeychainStationCredentialStore()
     )
 
     static let preview = AppEnvironment(
         apiClient: URLSessionBirdNETGoAPIClient(),
-        stationProfileStore: InMemoryStationProfileStore()
+        stationProfileStore: InMemoryStationProfileStore(),
+        credentialStore: KeychainStationCredentialStore()
     )
 }
 

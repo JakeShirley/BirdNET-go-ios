@@ -163,10 +163,10 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 
 | ID | Status | Feature | Notes |
 | --- | --- | --- | --- |
-| CON-001 | not-started | Manual station connection | User enters base URL, app checks `/ping` and `/app/config`. |
-| CON-002 | not-started | Connection validation | Validate scheme, host, TLS state, API version, and BirdNET-Go identity. |
-| CON-003 | not-started | Secure credential storage | Store credentials/session tokens in Keychain only. |
-| CON-004 | not-started | Login/logout | Support `/auth/login`, `/auth/logout`, `/auth/status`. |
+| CON-001 | done | Manual station connection | Station tab accepts a base URL and validates `/ping` plus `/app/config`. |
+| CON-002 | done | Connection validation | Validates URL scheme, host, TLS state, BirdNET-Go app config identity, and version. |
+| CON-003 | done | Secure credential storage | Basic-auth credentials are saved only through Keychain; session cookies use an ephemeral URLSession. |
+| CON-004 | done | Login/logout | Supports password-only simple auth via BirdNET-Go's compatibility username, direct `/auth/login`, auth-code callback completion, `/auth/status`, and `/auth/logout`. |
 | CON-005 | not-started | CSRF handling | Fetch and attach CSRF token for mutations. |
 | CON-006 | not-started | Local network discovery | Explore Bonjour/mDNS or subnet scan if BirdNET-Go exposes discoverable metadata. |
 | CON-007 | not-started | Self-signed TLS flow | Explicit user approval, certificate fingerprint display, revocation/reset. |

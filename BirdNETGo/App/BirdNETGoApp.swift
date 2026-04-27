@@ -6,7 +6,7 @@ struct BirdNETGoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootTabView()
+            RootTabView(initialTab: AppTab.initialTab())
                 .environment(\.appEnvironment, environment)
         }
     }

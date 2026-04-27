@@ -17,6 +17,8 @@
 		8A3F40842BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407D2BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift */; };
 		8A3F40852BD9000100A11001 /* StationProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407E2BD9000100A11001 /* StationProfileStore.swift */; };
 		8A3F40862BD9000100A11001 /* InMemoryStationProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407F2BD9000100A11001 /* InMemoryStationProfileStore.swift */; };
+		8A3F40902BD9000200A11001 /* KeychainStationCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F408E2BD9000200A11001 /* KeychainStationCredentialStore.swift */; };
+		8A3F40912BD9000200A11001 /* StationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F408F2BD9000200A11001 /* StationViewModel.swift */; };
 		8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5D2BD8000100A11001 /* FeedView.swift */; };
 		8A3F3F632BD8000100A11001 /* SpeciesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */; };
 		8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F682BD8000100A11001 /* StatsView.swift */; };
@@ -36,6 +38,9 @@
 		8A3F407D2BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionBirdNETGoAPIClient.swift; sourceTree = "<group>"; };
 		8A3F407E2BD9000100A11001 /* StationProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationProfileStore.swift; sourceTree = "<group>"; };
 		8A3F407F2BD9000100A11001 /* InMemoryStationProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryStationProfileStore.swift; sourceTree = "<group>"; };
+		8A3F408E2BD9000200A11001 /* KeychainStationCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStationCredentialStore.swift; sourceTree = "<group>"; };
+		8A3F408F2BD9000200A11001 /* StationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationViewModel.swift; sourceTree = "<group>"; };
+		8A3F40922BD9000200A11001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A3F3F5D2BD8000100A11001 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesView.swift; sourceTree = "<group>"; };
 		8A3F3F682BD8000100A11001 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
@@ -125,6 +130,7 @@
 			children = (
 				8A3F407E2BD9000100A11001 /* StationProfileStore.swift */,
 				8A3F407F2BD9000100A11001 /* InMemoryStationProfileStore.swift */,
+				8A3F408E2BD9000200A11001 /* KeychainStationCredentialStore.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -168,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				8A3F3F6A2BD8000100A11001 /* StationView.swift */,
+				8A3F408F2BD9000200A11001 /* StationViewModel.swift */,
 			);
 			path = Station;
 			sourceTree = "<group>";
@@ -175,6 +182,7 @@
 		8A3F3F6E2BD8000100A11001 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8A3F40922BD9000200A11001 /* Info.plist */,
 				8A3F3F6F2BD8000100A11001 /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -259,6 +267,8 @@
 				8A3F40842BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift in Sources */,
 				8A3F40852BD9000100A11001 /* StationProfileStore.swift in Sources */,
 				8A3F40862BD9000100A11001 /* InMemoryStationProfileStore.swift in Sources */,
+				8A3F40902BD9000200A11001 /* KeychainStationCredentialStore.swift in Sources */,
+				8A3F40912BD9000200A11001 /* StationViewModel.swift in Sources */,
 				8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */,
 				8A3F3F632BD8000100A11001 /* SpeciesView.swift in Sources */,
 				8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */,
@@ -395,13 +405,8 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = F2KBRBAJF3;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "BirdNET-Go";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BirdNETGo/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -428,13 +433,8 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = F2KBRBAJF3;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "BirdNET-Go";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BirdNETGo/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

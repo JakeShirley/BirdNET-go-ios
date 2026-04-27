@@ -11,3 +11,14 @@ struct StationProfile: Codable, Hashable, Identifiable, Sendable {
         self.baseURL = baseURL
     }
 }
+
+struct StationCredentials: Codable, Equatable, Sendable {
+    var username: String?
+    var password: String
+}
+
+extension StationProfile {
+    static func manual(baseURL: URL) -> StationProfile {
+        StationProfile(name: baseURL.host(percentEncoded: false) ?? baseURL.absoluteString, baseURL: baseURL)
+    }
+}

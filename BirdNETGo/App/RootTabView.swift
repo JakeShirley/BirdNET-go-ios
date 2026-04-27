@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct RootTabView: View {
-    @State private var selectedTab: AppTab = .feed
+    @State private var selectedTab: AppTab
+
+    init(initialTab: AppTab = .feed) {
+        self._selectedTab = State(initialValue: initialTab)
+    }
 
     var body: some View {
         TabView(selection: $selectedTab) {
