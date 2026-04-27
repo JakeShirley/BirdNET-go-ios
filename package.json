@@ -1,0 +1,19 @@
+{
+  "name": "birdnet-go-ios",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Native iOS companion app for BirdNET-Go.",
+  "scripts": {
+    "release": "semantic-release"
+  },
+  "overrides": {
+    "npm": "^11.13.0"
+  },
+  "devDependencies": {
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/github": "^11.0.1",
+    "@semantic-release/release-notes-generator": "^14.0.3",
+    "semantic-release": "^24.2.3"
+  }
+}

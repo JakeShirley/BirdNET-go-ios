@@ -8,5 +8,8 @@ xcuserdata/
 # Swift Package Manager
 .build/
 
+# Node release tooling
+node_modules/
+
 # macOS
 .DS_Store

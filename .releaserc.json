@@ -1,0 +1,21 @@
+{
+  "branches": ["main"],
+  "tagFormat": "v${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "xcodebuild -project BirdNETGo.xcodeproj -scheme BirdNETGo -configuration Release -destination 'generic/platform=iOS Simulator' -derivedDataPath build/DerivedData MARKETING_VERSION=${nextRelease.version} CURRENT_PROJECT_VERSION=${nextRelease.version} CODE_SIGNING_ALLOWED=NO build"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "successComment": false,
+        "failComment": false
+      }
+    ]
+  ]
+}
