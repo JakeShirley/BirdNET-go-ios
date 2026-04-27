@@ -70,3 +70,13 @@ ci(release): add semantic-release workflow
 - Do not manually edit generated release notes, tags, or version bumps unless the release automation itself is being fixed.
 - If a change is user-visible, choose `feat`, `fix`, or `perf` instead of hiding it under `chore`.
 - Keep release-impacting changes separate from unrelated documentation or cleanup when practical.
+
+## App Structure
+
+The iOS app keeps foundation code in separate source areas so feature work can grow without mixing concerns:
+
+- `BirdNETGo/App`: SwiftUI app entry point, tab shell, and dependency environment wiring.
+- `BirdNETGo/Domain`: shared app models and domain state.
+- `BirdNETGo/Networking`: BirdNET-Go API client protocols and URLSession implementations.
+- `BirdNETGo/Storage`: storage protocols and concrete persistence implementations.
+- `BirdNETGo/Features`: user-facing SwiftUI feature modules such as Feed, Species, Stats, and Station.

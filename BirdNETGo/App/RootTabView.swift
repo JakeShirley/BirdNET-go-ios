@@ -34,4 +34,5 @@ struct RootTabView: View {
 
 #Preview {
     RootTabView()
+        .environment(\.appEnvironment, .preview)
 }

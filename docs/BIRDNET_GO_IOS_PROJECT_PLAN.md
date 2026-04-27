@@ -149,7 +149,7 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 | ID | Status | Feature | Notes |
 | --- | --- | --- | --- |
 | FND-001 | done | Native SwiftUI app shell | Xcode project, shared scheme, SwiftUI app entry point, and Feed/Species/Stats/Station tab shell. |
-| FND-002 | not-started | App architecture | Separate networking, storage, domain models, and UI modules. |
+| FND-002 | done | App architecture | Added App, Domain, Networking, Storage, and Features boundaries with environment-injected API and profile store protocols. |
 | FND-003 | not-started | Environment configuration | Debug station URL overrides, local network test profile. |
 | FND-004 | not-started | Local persistence | Cache detections, species, station profiles, and preferences. |
 | FND-005 | not-started | Error model | User-friendly offline, auth, TLS, rate limit, and server errors. |

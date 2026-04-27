@@ -10,6 +10,13 @@
 		8A3F3F5F2BD8000100A11001 /* BirdNETGoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5A2BD8000100A11001 /* BirdNETGoApp.swift */; };
 		8A3F3F602BD8000100A11001 /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5B2BD8000100A11001 /* AppTab.swift */; };
 		8A3F3F612BD8000100A11001 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5C2BD8000100A11001 /* RootTabView.swift */; };
+		8A3F40802BD9000100A11001 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40792BD9000100A11001 /* AppEnvironment.swift */; };
+		8A3F40812BD9000100A11001 /* StationProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407A2BD9000100A11001 /* StationProfile.swift */; };
+		8A3F40822BD9000100A11001 /* StationConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407B2BD9000100A11001 /* StationConnectionStatus.swift */; };
+		8A3F40832BD9000100A11001 /* BirdNETGoAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407C2BD9000100A11001 /* BirdNETGoAPIClient.swift */; };
+		8A3F40842BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407D2BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift */; };
+		8A3F40852BD9000100A11001 /* StationProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407E2BD9000100A11001 /* StationProfileStore.swift */; };
+		8A3F40862BD9000100A11001 /* InMemoryStationProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407F2BD9000100A11001 /* InMemoryStationProfileStore.swift */; };
 		8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5D2BD8000100A11001 /* FeedView.swift */; };
 		8A3F3F632BD8000100A11001 /* SpeciesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */; };
 		8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F682BD8000100A11001 /* StatsView.swift */; };
@@ -22,6 +29,13 @@
 		8A3F3F5A2BD8000100A11001 /* BirdNETGoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdNETGoApp.swift; sourceTree = "<group>"; };
 		8A3F3F5B2BD8000100A11001 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
 		8A3F3F5C2BD8000100A11001 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		8A3F40792BD9000100A11001 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		8A3F407A2BD9000100A11001 /* StationProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationProfile.swift; sourceTree = "<group>"; };
+		8A3F407B2BD9000100A11001 /* StationConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationConnectionStatus.swift; sourceTree = "<group>"; };
+		8A3F407C2BD9000100A11001 /* BirdNETGoAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdNETGoAPIClient.swift; sourceTree = "<group>"; };
+		8A3F407D2BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionBirdNETGoAPIClient.swift; sourceTree = "<group>"; };
+		8A3F407E2BD9000100A11001 /* StationProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationProfileStore.swift; sourceTree = "<group>"; };
+		8A3F407F2BD9000100A11001 /* InMemoryStationProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryStationProfileStore.swift; sourceTree = "<group>"; };
 		8A3F3F5D2BD8000100A11001 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesView.swift; sourceTree = "<group>"; };
 		8A3F3F682BD8000100A11001 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
@@ -60,6 +74,9 @@
 			isa = PBXGroup;
 			children = (
 				8A3F3F532BD8000100A11001 /* App */,
+				8A3F40872BD9000100A11001 /* Domain */,
+				8A3F40892BD9000100A11001 /* Networking */,
+				8A3F408A2BD9000100A11001 /* Storage */,
 				8A3F3F542BD8000100A11001 /* Features */,
 				8A3F3F6E2BD8000100A11001 /* Resources */,
 			);
@@ -72,8 +89,44 @@
 				8A3F3F5A2BD8000100A11001 /* BirdNETGoApp.swift */,
 				8A3F3F5B2BD8000100A11001 /* AppTab.swift */,
 				8A3F3F5C2BD8000100A11001 /* RootTabView.swift */,
+				8A3F40792BD9000100A11001 /* AppEnvironment.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		8A3F40872BD9000100A11001 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F40882BD9000100A11001 /* Models */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		8A3F40882BD9000100A11001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F407A2BD9000100A11001 /* StationProfile.swift */,
+				8A3F407B2BD9000100A11001 /* StationConnectionStatus.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8A3F40892BD9000100A11001 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F407C2BD9000100A11001 /* BirdNETGoAPIClient.swift */,
+				8A3F407D2BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		8A3F408A2BD9000100A11001 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F407E2BD9000100A11001 /* StationProfileStore.swift */,
+				8A3F407F2BD9000100A11001 /* InMemoryStationProfileStore.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		8A3F3F542BD8000100A11001 /* Features */ = {
@@ -199,6 +252,13 @@
 				8A3F3F5F2BD8000100A11001 /* BirdNETGoApp.swift in Sources */,
 				8A3F3F602BD8000100A11001 /* AppTab.swift in Sources */,
 				8A3F3F612BD8000100A11001 /* RootTabView.swift in Sources */,
+				8A3F40802BD9000100A11001 /* AppEnvironment.swift in Sources */,
+				8A3F40812BD9000100A11001 /* StationProfile.swift in Sources */,
+				8A3F40822BD9000100A11001 /* StationConnectionStatus.swift in Sources */,
+				8A3F40832BD9000100A11001 /* BirdNETGoAPIClient.swift in Sources */,
+				8A3F40842BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift in Sources */,
+				8A3F40852BD9000100A11001 /* StationProfileStore.swift in Sources */,
+				8A3F40862BD9000100A11001 /* InMemoryStationProfileStore.swift in Sources */,
 				8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */,
 				8A3F3F632BD8000100A11001 /* SpeciesView.swift in Sources */,
 				8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */,
