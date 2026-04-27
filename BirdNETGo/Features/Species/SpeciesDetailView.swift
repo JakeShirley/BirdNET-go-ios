@@ -66,7 +66,6 @@ struct SpeciesDetailView: View {
         }
         .navigationTitle(viewModel.species.commonName)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

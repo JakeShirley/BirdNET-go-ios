@@ -100,7 +100,6 @@ struct DetectionDetailView: View {
         }
         .navigationTitle("Detection")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
         .task {
             await viewModel.load(environment: appEnvironment)
         }
