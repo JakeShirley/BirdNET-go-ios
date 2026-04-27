@@ -102,6 +102,7 @@ Supported debug inputs:
 - `-useLocalStationProfile`: prefill a local test station profile when no station profile is saved.
 - `-localStationURL <url>`: override the local test profile URL. Defaults to `http://localhost:8080`.
 - `-debugDetectionID <id>`: open a detection detail screen on launch for visual simulator checks.
+- `-initialTab <dashboard|feed|species|station>`: choose the launch tab. `stats` remains accepted as a legacy alias for `dashboard`.
 - `BIRDNET_GO_USE_LOCAL_STATION_PROFILE=1`: environment equivalent of `-useLocalStationProfile`.
 - `BIRDNET_GO_LOCAL_STATION_URL=<url>`: environment equivalent of `-localStationURL`.
 - `BIRDNET_GO_DEBUG_DETECTION_ID=<id>`: environment equivalent of `-debugDetectionID`.
@@ -118,11 +119,13 @@ The iOS app keeps foundation code in separate source areas so feature work can g
 - `BirdNETGo/Domain`: shared app models, detection DTOs, and domain state.
 - `BirdNETGo/Networking`: BirdNET-Go API client protocols, URLSession implementations, and SSE stream parsing.
 - `BirdNETGo/Storage`: storage protocols, UserDefaults-backed profile/preference persistence, local cache storage, and Keychain-backed credential storage.
-- `BirdNETGo/Features`: user-facing SwiftUI feature modules such as Feed, DetectionDetail, Species, Stats, and Station. Feature view models own screen state and call dependencies through `AppEnvironment`.
+- `BirdNETGo/Features`: user-facing SwiftUI feature modules such as Dashboard, Feed, DetectionDetail, Species, and Station. Feature view models own screen state and call dependencies through `AppEnvironment`.
 
 The Feed feature keeps recent-list refresh and live streaming separate: pull-to-refresh fetches `/api/v2/detections/recent?limit=10`, while the view model's live task listens to `/api/v2/detections/stream`, deduplicates incoming detections by ID, updates the same local cache, and reconnects with capped exponential backoff.
 
 The Species feature loads `/api/v2/species` for station catalog enrichment and augments the list with recent detection summaries from `/api/v2/detections/recent`. Because BirdNET-Go stations may reject the catalog endpoint depending on configuration or version, catalog failures are quiet when recent detections can still populate the detected-species list. The species response decoder accepts both bare arrays and common response envelopes so it can tolerate BirdNET-Go API shape changes, and the merged list is cached per station for stale offline fallback.
+
+The Dashboard tab loads `/api/v2/analytics/species/daily?date=<yyyy-mm-dd>&limit=<n>` for the selected day and renders the returned `hourly_counts` as a per-species heatmap. It also fetches `/api/v2/detections/recent` for the Currently Hearing strip. If daily analytics are unavailable but recent detections load, the view builds a same-day summary from recent detections; successful dashboard payloads are cached per station and date for stale offline fallback.
 
 Detection detail uses `/api/v2/detections/:id` for the canonical detail payload. Audio playback uses a station-relative `/api/v2/audio/:id` URL with `AVPlayer`; the auth-only clip extraction endpoint is intentionally left for later media editing work.
 

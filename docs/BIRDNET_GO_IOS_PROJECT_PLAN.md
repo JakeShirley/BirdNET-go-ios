@@ -137,10 +137,10 @@ Initial navigation should be tab-based:
 | --- | --- | --- |
 | Feed | Live and recent detections. | Advanced filters, saved views, realtime events, new species badges. |
 | Species | Species detected by the station. | Species profiles, favorite species, seasonal history, taxonomy browsing. |
-| Stats | Simple daily and weekly charts. | Insights, migration patterns, dawn chorus, weather overlays. |
+| Dashboard | Daily activity and simple weekly charts. | Insights, migration patterns, dawn chorus, weather overlays. |
 | Station | Connection, status, and account. | Stream health, resource usage, settings, admin controls. |
 
-Detection detail should be reachable from Feed, Species, Stats, notifications, and search results.
+Detection detail should be reachable from Dashboard, Feed, Species, notifications, and search results.
 
 ## Long-Term Feature Backlog
 
@@ -150,7 +150,7 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 
 | ID | Status | Feature | Notes |
 | --- | --- | --- | --- |
-| FND-001 | done | Native SwiftUI app shell | Xcode project, shared scheme, SwiftUI app entry point, and Feed/Species/Stats/Station tab shell. |
+| FND-001 | done | Native SwiftUI app shell | Xcode project, shared scheme, SwiftUI app entry point, and Dashboard/Feed/Species/Station tab shell. |
 | FND-002 | done | App architecture | Added App, Domain, Networking, Storage, and Features boundaries with environment-injected API and profile store protocols. |
 | FND-003 | done | Environment configuration | Added launch/environment station URL overrides and an opt-in local network test profile. |
 | FND-004 | done | Local persistence | Persists active station profile and preferences locally; adds a file-backed cache foundation for future detection/species payloads. |
@@ -224,9 +224,9 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 
 | ID | Status | Feature | Notes |
 | --- | --- | --- | --- |
-| ANA-001 | not-started | Daily counts | Use `/analytics/species/daily`. |
+| ANA-001 | done | Daily counts | Dashboard loads `/analytics/species/daily` and caches per station/date. |
 | ANA-002 | not-started | Species summary | Use `/analytics/species/summary`. |
-| ANA-003 | not-started | Hourly activity chart | Use `/analytics/time/hourly`. |
+| ANA-003 | done | Hourly activity chart | Dashboard renders per-species hourly heatmap from daily analytics `hourly_counts`, with recent-detection fallback. |
 | ANA-004 | not-started | Daily trend chart | Use `/analytics/time/daily`. |
 | ANA-005 | not-started | New species timeline | Use `/analytics/species/detections/new`. |
 | ANA-006 | not-started | Dashboard KPIs | Use `/dashboard/kpis` when v2 database supports it. |
@@ -343,7 +343,7 @@ Status: not-started
 
 Deliverables:
 
-- SwiftUI app shell with Feed, Species, Stats, and Station tabs.
+- SwiftUI app shell with Dashboard, Feed, Species, and Station tabs.
 - Standard SwiftUI navigation, forms, lists, sheets, and toolbars that adopt current iOS design automatically.
 - Manual station connection flow.
 - Connectivity check using `/ping`, `/health`, and `/app/config`.

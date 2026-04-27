@@ -96,6 +96,16 @@ struct URLSessionBirdNETGoAPIClient: BirdNETGoAPIClient {
         return try decoder.decode(StationSpeciesList.self, from: data).species
     }
 
+    func dailySpeciesSummary(station: StationProfile, date: String, limit: Int) async throws -> [DailySpeciesSummary] {
+        let queryItems = [
+            URLQueryItem(name: "date", value: date),
+            URLQueryItem(name: "limit", value: "\(limit)")
+        ]
+        let (data, response) = try await perform(request(station: station, path: "api/v2/analytics/species/daily", queryItems: queryItems))
+        try validate(response: response, data: data)
+        return try decoder.decode([DailySpeciesSummary].self, from: data)
+    }
+
     func audioClipURL(station: StationProfile, detectionID: Int) -> URL {
         station.baseURL.appending(path: "api/v2/audio/\(detectionID)")
     }

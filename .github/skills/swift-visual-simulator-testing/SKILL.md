@@ -30,7 +30,7 @@ Use this skill when a Swift or SwiftUI change affects visible iOS behavior, layo
    xcrun simctl launch --terminate-running-process 5F8AE900-844B-4FDF-8B63-368C7751A4FE com.jakeshirley.birdnetgo --args -initialTab station
    ```
 
-   Supported values are `feed`, `species`, `stats`, and `station`.
+   Supported values are `dashboard`, `feed`, `species`, and `station`. `stats` remains accepted as a legacy alias.
 
 5. Capture a screenshot into `build/screenshots/` with a filename that names the feature or task.
 

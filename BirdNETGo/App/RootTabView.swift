@@ -3,12 +3,18 @@ import SwiftUI
 struct RootTabView: View {
     @State private var selectedTab: AppTab
 
-    init(initialTab: AppTab = .feed) {
+    init(initialTab: AppTab = .dashboard) {
         self._selectedTab = State(initialValue: initialTab)
     }
 
     var body: some View {
         TabView(selection: $selectedTab) {
+            NavigationStack {
+                StatsView()
+            }
+            .tabItem { Label(AppTab.dashboard.title, systemImage: AppTab.dashboard.systemImage) }
+            .tag(AppTab.dashboard)
+
             NavigationStack {
                 FeedView()
             }
@@ -20,12 +26,6 @@ struct RootTabView: View {
             }
             .tabItem { Label(AppTab.species.title, systemImage: AppTab.species.systemImage) }
             .tag(AppTab.species)
-
-            NavigationStack {
-                StatsView()
-            }
-            .tabItem { Label(AppTab.stats.title, systemImage: AppTab.stats.systemImage) }
-            .tag(AppTab.stats)
 
             NavigationStack {
                 StationView()
