@@ -26,6 +26,7 @@
 		8A3F409C2BD9000300A11001 /* LocalCacheStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F409B2BD9000300A11001 /* LocalCacheStore.swift */; };
 		8A3F409E2BD9000400A11001 /* BirdDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F409D2BD9000400A11001 /* BirdDetection.swift */; };
 		8A3F40A02BD9000400A11001 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F409F2BD9000400A11001 /* FeedViewModel.swift */; };
+		8A3F40A22BD9000500A11001 /* BirdDetectionStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40A12BD9000500A11001 /* BirdDetectionStream.swift */; };
 		8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5D2BD8000100A11001 /* FeedView.swift */; };
 		8A3F3F632BD8000100A11001 /* SpeciesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */; };
 		8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F682BD8000100A11001 /* StatsView.swift */; };
@@ -55,6 +56,7 @@
 		8A3F409B2BD9000300A11001 /* LocalCacheStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCacheStore.swift; sourceTree = "<group>"; };
 		8A3F409D2BD9000400A11001 /* BirdDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdDetection.swift; sourceTree = "<group>"; };
 		8A3F409F2BD9000400A11001 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
+		8A3F40A12BD9000500A11001 /* BirdDetectionStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdDetectionStream.swift; sourceTree = "<group>"; };
 		8A3F3F5D2BD8000100A11001 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesView.swift; sourceTree = "<group>"; };
 		8A3F3F682BD8000100A11001 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			children = (
 				8A3F407C2BD9000100A11001 /* BirdNETGoAPIClient.swift */,
 				8A3F407D2BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift */,
+				8A3F40A12BD9000500A11001 /* BirdDetectionStream.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				8A3F409E2BD9000400A11001 /* BirdDetection.swift in Sources */,
 				8A3F40832BD9000100A11001 /* BirdNETGoAPIClient.swift in Sources */,
 				8A3F40842BD9000100A11001 /* URLSessionBirdNETGoAPIClient.swift in Sources */,
+				8A3F40A22BD9000500A11001 /* BirdDetectionStream.swift in Sources */,
 				8A3F40852BD9000100A11001 /* StationProfileStore.swift in Sources */,
 				8A3F40862BD9000100A11001 /* InMemoryStationProfileStore.swift in Sources */,
 				8A3F40962BD9000300A11001 /* UserDefaultsStationProfileStore.swift in Sources */,

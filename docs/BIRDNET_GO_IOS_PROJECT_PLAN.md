@@ -180,8 +180,8 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 | ID | Status | Feature | Notes |
 | --- | --- | --- | --- |
 | DET-001 | done | Recent detections list | Feed tab loads `/detections/recent?limit=10`, renders recent detections, and falls back to cached results when available. |
-| DET-002 | not-started | Live SSE feed | Use `/detections/stream` with reconnect and backoff. |
-| DET-003 | not-started | Pull-to-refresh | Refresh without disrupting live stream state. |
+| DET-002 | done | Live SSE feed | Feed tab connects to `/detections/stream`, merges live detection events into the recent list, and reconnects with exponential backoff up to 30 seconds. |
+| DET-003 | done | Pull-to-refresh | Manual refresh reloads `/detections/recent?limit=10` and preserves the active live stream task. |
 | DET-004 | not-started | Infinite history | Paginate older detections. |
 | DET-005 | not-started | Detection cards | Species, confidence, time, thumbnail, source, reviewed/locked states if available. |
 | DET-006 | not-started | Feed filters | Date, species, confidence, source, reviewed, locked, favorites. |

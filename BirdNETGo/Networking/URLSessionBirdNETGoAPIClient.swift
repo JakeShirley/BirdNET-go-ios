@@ -84,6 +84,59 @@ struct URLSessionBirdNETGoAPIClient: BirdNETGoAPIClient {
         return try decoder.decode([BirdDetection].self, from: data)
     }
 
+    func detectionEvents(station: StationProfile) -> AsyncThrowingStream<BirdDetectionStreamEvent, Error> {
+        AsyncThrowingStream { continuation in
+            let task = Task {
+                do {
+                    var request = request(station: station, path: "api/v2/detections/stream")
+                    request.setValue("text/event-stream", forHTTPHeaderField: "Accept")
+                    request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
+
+                    let (bytes, response) = try await urlSession.bytes(for: request)
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        throw StationConnectionError.invalidResponse
+                    }
+
+                    try validate(response: httpResponse, data: Data())
+
+                    var message = ServerSentEventMessage()
+                    for try await line in bytes.lines {
+                        try Task.checkCancellation()
+                        let normalizedLine = line.trimmingCharacters(in: .newlines)
+
+                        if normalizedLine.isEmpty {
+                            if let event = try decodeStreamEvent(message) {
+                                continuation.yield(event)
+                            }
+                            message = ServerSentEventMessage()
+                        } else {
+                            if normalizedLine.hasPrefix("event:"), let event = try decodeStreamEvent(message) {
+                                continuation.yield(event)
+                                message = ServerSentEventMessage()
+                            }
+
+                            message.append(normalizedLine)
+                        }
+                    }
+
+                    if let event = try decodeStreamEvent(message) {
+                        continuation.yield(event)
+                    }
+
+                    continuation.finish()
+                } catch is CancellationError {
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+
+            continuation.onTermination = { _ in
+                task.cancel()
+            }
+        }
+    }
+
     private func completeLoginRedirect(_ redirectURL: String, station: StationProfile) async throws {
         let callbackURL: URL
         if let absoluteURL = URL(string: redirectURL), absoluteURL.scheme != nil {
@@ -134,6 +187,31 @@ struct URLSessionBirdNETGoAPIClient: BirdNETGoAPIClient {
         guard (200..<300).contains(response.statusCode) else {
             let message = try? decoder.decode(StationAuthResponse.self, from: data).message
             throw StationConnectionError.serverRejected(statusCode: response.statusCode, message: message)
+        }
+    }
+
+    private func decodeStreamEvent(_ message: ServerSentEventMessage) throws -> BirdDetectionStreamEvent? {
+        guard message.hasData else {
+            return nil
+        }
+
+        switch message.event {
+        case "connected":
+            return .connected
+        case "detection":
+            guard let data = message.data else {
+                return nil
+            }
+            return .detection(try decoder.decode(BirdDetection.self, from: data))
+        case "heartbeat":
+            return .heartbeat
+        case "pending":
+            return .pending
+        default:
+            guard let data = message.data, let detection = try? decoder.decode(BirdDetection.self, from: data) else {
+                return nil
+            }
+            return .detection(detection)
         }
     }
 

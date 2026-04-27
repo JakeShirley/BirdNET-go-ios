@@ -111,6 +111,8 @@ The iOS app keeps foundation code in separate source areas so feature work can g
 
 - `BirdNETGo/App`: SwiftUI app entry point, tab shell, app configuration, and dependency environment wiring.
 - `BirdNETGo/Domain`: shared app models, detection DTOs, and domain state.
-- `BirdNETGo/Networking`: BirdNET-Go API client protocols and URLSession implementations.
+- `BirdNETGo/Networking`: BirdNET-Go API client protocols, URLSession implementations, and SSE stream parsing.
 - `BirdNETGo/Storage`: storage protocols, UserDefaults-backed profile/preference persistence, local cache storage, and Keychain-backed credential storage.
 - `BirdNETGo/Features`: user-facing SwiftUI feature modules such as Feed, Species, Stats, and Station. Feature view models own screen state and call dependencies through `AppEnvironment`.
+
+The Feed feature keeps recent-list refresh and live streaming separate: pull-to-refresh fetches `/api/v2/detections/recent?limit=10`, while the view model's live task listens to `/api/v2/detections/stream`, deduplicates incoming detections by ID, updates the same local cache, and reconnects with capped exponential backoff.

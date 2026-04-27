@@ -6,6 +6,12 @@ struct FeedView: View {
 
     var body: some View {
         List {
+            if viewModel.hasStation, let streamStatusMessage = viewModel.streamStatusMessage {
+                Label(streamStatusMessage, systemImage: viewModel.streamStatusKind.systemImage)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             if !viewModel.hasStation {
                 ContentUnavailableView(
                     "No Station Connected",
@@ -33,7 +39,8 @@ struct FeedView: View {
                 }
 
                 ForEach(viewModel.detections) { detection in
-                    DetectionRow(detection: detection)
+                    DetectionRow(detection: detection, isLiveInserted: detection.id == viewModel.liveInsertedDetectionID)
+                        .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity), removal: .opacity))
                 }
             }
         }
@@ -51,6 +58,7 @@ struct FeedView: View {
         }
         .task {
             await viewModel.load(environment: appEnvironment)
+            await viewModel.runLiveStream(environment: appEnvironment)
         }
         .refreshable {
             await viewModel.refresh(environment: appEnvironment)
@@ -60,6 +68,9 @@ struct FeedView: View {
 
 private struct DetectionRow: View {
     var detection: BirdDetection
+    var isLiveInserted: Bool
+
+    @State private var isAnimatingLiveInsertion = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -81,21 +92,44 @@ private struct DetectionRow: View {
 
             HStack(spacing: 12) {
                 Label(detection.timeLabel, systemImage: "clock")
+                    .layoutPriority(1)
                 if let sourceLabel = detection.sourceLabel, !sourceLabel.isEmpty {
                     Label(sourceLabel, systemImage: "waveform")
                         .lineLimit(1)
                 }
                 if detection.locked {
                     Label("Locked", systemImage: "lock.fill")
+                        .labelStyle(.iconOnly)
                 }
                 if detection.isNewSpecies == true {
                     Label("New", systemImage: "sparkle")
+                        .labelStyle(.iconOnly)
                 }
             }
             .font(.caption)
             .foregroundStyle(.secondary)
+            .lineLimit(1)
         }
         .padding(.vertical, 4)
+        .background {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.accentColor.opacity(isAnimatingLiveInsertion ? 0.14 : 0))
+        }
+        .opacity(isAnimatingLiveInsertion ? 0.9 : 1)
+        .offset(y: isAnimatingLiveInsertion ? -6 : 0)
+        .onAppear {
+            guard isLiveInserted else {
+                return
+            }
+
+            isAnimatingLiveInsertion = true
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(120))
+                withAnimation(.easeOut(duration: 1.1)) {
+                    isAnimatingLiveInsertion = false
+                }
+            }
+        }
     }
 }
 

@@ -8,6 +8,7 @@ protocol BirdNETGoAPIClient: Sendable {
     func logout(station: StationProfile, csrfToken: String?) async throws -> StationAuthResponse
     func authStatus(station: StationProfile) async throws -> StationAuthStatus
     func recentDetections(station: StationProfile, limit: Int) async throws -> [BirdDetection]
+    func detectionEvents(station: StationProfile) -> AsyncThrowingStream<BirdDetectionStreamEvent, Error>
 }
 
 struct StationAppConfig: Decodable, Equatable, Sendable {
