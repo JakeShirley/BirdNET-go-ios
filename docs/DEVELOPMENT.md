@@ -95,7 +95,7 @@ refactor(storage): [FND-004] split profile persistence protocol
 feat: [CON-001] [CON-002] validate manual station connection
 ```
 
-For repository-only work that does not map to a planned backlog step, use `[NO-PLAN]` and explain why in the commit body.
+For repository-only work that does not map to a planned backlog step, don't use a `[TAG]` and explain why in the commit body.
 
 Common types:
 
@@ -126,9 +126,9 @@ Examples:
 ```text
 feat(feed): [DET-002] add live detection stream
 fix(auth): [CON-005] refresh csrf token after login
-docs(release): [NO-PLAN] document semantic-release workflow
+docs(release): document semantic-release workflow
 test(api): [CON-002] add station config decoding fixtures
-ci(release): [NO-PLAN] add semantic-release workflow
+ci(release): add semantic-release workflow
 ```
 
 ## Agent And Contributor Expectations

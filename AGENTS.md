@@ -23,10 +23,10 @@ Include one or more project plan step IDs from `docs/BIRDNET_GO_IOS_PROJECT_PLAN
 ```text
 feat(feed): [DET-002] add live detection stream
 fix(auth): [CON-005] refresh csrf token after login
-docs(release): [NO-PLAN] document semantic-release workflow
+docs(release): document semantic-release workflow
 ```
 
-If a commit spans multiple planned steps, include each ID in separate brackets, for example `feat: [CON-001] [CON-002] validate manual station connection`. For repository-only work that does not map to a planned backlog step, use `[NO-PLAN]` and explain why in the commit body.
+If a commit spans multiple planned steps, include each ID in separate brackets, for example `feat: [CON-001] [CON-002] validate manual station connection`. For repository-only work that does not map to a planned backlog step, dont use a `[TAG]` and explain why in the commit body.
 
 Mark breaking changes with `!` or a `BREAKING CHANGE:` footer.
 
