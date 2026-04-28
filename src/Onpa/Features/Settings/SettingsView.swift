@@ -8,6 +8,21 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
+            Section("Appearance") {
+                Picker(selection: $viewModel.appearance) {
+                    ForEach(AppearancePreference.allCases) { option in
+                        Label(option.label, systemImage: option.systemImage)
+                            .tag(option)
+                    }
+                } label: {
+                    Label("Theme", systemImage: "paintbrush")
+                }
+                .pickerStyle(.menu)
+                .onChange(of: viewModel.appearance) {
+                    Task { await viewModel.save(environment: appEnvironment) }
+                }
+            }
+
             Section("Media") {
                 Toggle("Auto Fetch Spectrograms", isOn: $viewModel.autoFetchSpectrograms)
                     .onChange(of: viewModel.autoFetchSpectrograms) {

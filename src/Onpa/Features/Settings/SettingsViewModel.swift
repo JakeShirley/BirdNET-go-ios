@@ -4,6 +4,7 @@ import Foundation
 final class SettingsViewModel: ObservableObject {
     @Published var rememberStationCredentials = AppPreferences.defaults.rememberStationCredentials
     @Published var autoFetchSpectrograms = AppPreferences.defaults.autoFetchSpectrograms
+    @Published var appearance = AppPreferences.defaults.appearance
     @Published private(set) var statusMessage: String?
     @Published private(set) var statusSystemImage = "info.circle"
     @Published private(set) var isLoading = false
@@ -23,6 +24,8 @@ final class SettingsViewModel: ObservableObject {
             let preferences = try await environment.preferenceStore.loadPreferences()
             rememberStationCredentials = preferences.rememberStationCredentials
             autoFetchSpectrograms = preferences.autoFetchSpectrograms
+            appearance = preferences.appearance
+            UserDefaults.standard.set(preferences.appearance.rawValue, forKey: AppearancePreference.storageKey)
         } catch {
             setMessage(error.userFacingMessage, systemImage: "exclamationmark.triangle")
         }
@@ -33,9 +36,11 @@ final class SettingsViewModel: ObservableObject {
             try await environment.preferenceStore.savePreferences(
                 AppPreferences(
                     rememberStationCredentials: rememberStationCredentials,
-                    autoFetchSpectrograms: autoFetchSpectrograms
+                    autoFetchSpectrograms: autoFetchSpectrograms,
+                    appearance: appearance
                 )
             )
+            UserDefaults.standard.set(appearance.rawValue, forKey: AppearancePreference.storageKey)
             setMessage("Settings saved.", systemImage: "checkmark.circle")
         } catch {
             setMessage(error.userFacingMessage, systemImage: "exclamationmark.triangle")
