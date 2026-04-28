@@ -146,8 +146,8 @@ private struct ChangelogEntryBody: View {
     /// Groups the release body into named sections (e.g. "Features",
     /// "Bug Fixes"). Bullet points without a preceding `### ` heading are
     /// gathered into an implicit "Notes" section so they still render.
-    /// Sections are returned in a stable display order so e.g. Features
-    /// always appear before Bug Fixes regardless of source ordering.
+    /// Sections are returned in source order; semantic-release controls
+    /// the upstream ordering (Features before Bug Fixes, etc.).
     private var sections: [Section] {
         var sections: [Section] = []
         var currentTitle: String?
@@ -176,9 +176,7 @@ private struct ChangelogEntryBody: View {
         }
         flush()
 
-        return sections.sorted { lhs, rhs in
-            lhs.sortRank < rhs.sortRank
-        }
+        return sections
     }
 
     struct Section: Identifiable {
@@ -213,24 +211,6 @@ private struct ChangelogEntryBody: View {
             case let s where s.contains("refactor"): return .purple
             case let s where s.contains("revert"): return .pink
             default: return .secondary
-            }
-        }
-
-        /// Lower numbers sort first. Breaking changes lead, then Features,
-        /// then Bug Fixes, then everything else.
-        var sortRank: Int {
-            switch title.lowercased() {
-            case let s where s.contains("break"): return 0
-            case let s where s.contains("feature"): return 1
-            case let s where s.contains("bug") || s.contains("fix"): return 2
-            case let s where s.contains("perf"): return 3
-            case let s where s.contains("refactor"): return 4
-            case let s where s.contains("revert"): return 5
-            case let s where s.contains("doc"): return 6
-            case let s where s.contains("style"): return 7
-            case let s where s.contains("test"): return 8
-            case let s where s.contains("chore") || s.contains("build") || s.contains("ci"): return 9
-            default: return 10
             }
         }
     }
