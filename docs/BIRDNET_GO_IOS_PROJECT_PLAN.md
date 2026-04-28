@@ -158,7 +158,7 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 | FND-006 | done | Logging and diagnostics | Dashboard station management generates a local diagnostics text bundle with station hosts, usernames, tokens, cookies, and passwords redacted. |
 | FND-007 | not-started | Accessibility baseline | Dynamic Type, VoiceOver labels, contrast, reduced motion. |
 | FND-008 | not-started | Localization foundation | Prepare app strings for BirdNET-Go's multilingual audience. |
-| FND-009 | not-started | Liquid Glass-ready design system | Prefer standard SwiftUI components, system colors, SF Symbols, and minimal custom chrome. |
+| FND-009 | done | Liquid Glass-ready design system | DesignSystem token namespace (DS.accent, DS.Surface, DS.Shape, DS.Radius, DS.AccentTint, DS.Overlay) centralizes accent color, system surface tones, and standard radii so views adopt platform colors and SF Symbols by default with minimal custom chrome. |
 | FND-010 | not-started | Availability-gated platform features | Wrap iOS 26-only APIs so the deployment target can be chosen deliberately. |
 
 ### Station Connection and Security

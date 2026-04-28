@@ -134,7 +134,7 @@ private struct DetectionRow: View {
         }
         .padding(.vertical, 4)
         .background {
-            RoundedRectangle(cornerRadius: 8)
+            DS.Shape.card
                 .fill(Color.accentColor.opacity(isAnimatingLiveInsertion ? 0.14 : 0))
         }
         .opacity(isAnimatingLiveInsertion ? 0.9 : 1)

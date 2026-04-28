@@ -178,11 +178,11 @@ private struct SpeciesThumbnail: View {
             }
         }
         .overlay {
-            RoundedRectangle(cornerRadius: 8)
+            DS.Shape.card
                 .stroke(Color.secondary.opacity(0.16), lineWidth: 1)
         }
         .frame(width: 56, height: 56)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .clipShape(DS.Shape.card)
         .accessibilityLabel("Image of \(commonName)")
     }
 }

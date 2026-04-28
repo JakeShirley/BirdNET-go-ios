@@ -29,7 +29,7 @@ struct ChangelogView: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
                 }
-                .background(Color(.systemGroupedBackground))
+                .background(DS.Surface.grouped)
             }
         }
         .navigationTitle("Changelog")
@@ -53,7 +53,7 @@ private struct ReleaseCard: View {
             ChangelogEntryBody(markdown: entry.body)
         }
         .padding(16)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+        .background(DS.Surface.card, in: DS.Shape.xlarge)
     }
 
     private var header: some View {
@@ -64,10 +64,10 @@ private struct ReleaseCard: View {
                     if isLatest {
                         Text("Latest")
                             .font(.caption2.weight(.semibold))
-                            .foregroundStyle(.teal)
+                            .foregroundStyle(DS.accent)
                             .padding(.horizontal, 7)
                             .padding(.vertical, 2)
-                            .background(Color.teal.opacity(0.14), in: Capsule())
+                            .background(DS.AccentTint.soft, in: Capsule())
                     }
                 }
 
@@ -84,7 +84,7 @@ private struct ReleaseCard: View {
                 Link(destination: url) {
                     Image(systemName: "arrow.up.right.square")
                         .font(.title3)
-                        .foregroundStyle(.teal)
+                        .foregroundStyle(DS.accent)
                 }
                 .accessibilityLabel("View release \(entry.version) on GitHub")
             }
@@ -117,7 +117,7 @@ private struct VersionPill: View {
             .padding(.vertical, 4)
             .background(
                 highlighted
-                    ? AnyShapeStyle(Color.teal)
+                    ? AnyShapeStyle(DS.accent)
                     : AnyShapeStyle(Color(.tertiarySystemGroupedBackground)),
                 in: Capsule()
             )
@@ -285,7 +285,7 @@ private struct BulletRow: View {
                             .foregroundStyle(.secondary)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
-                            .background(Color(.tertiarySystemGroupedBackground), in: Capsule())
+                            .background(DS.Surface.inset, in: Capsule())
 
                         if let commit = bullet.commit {
                             CommitBadge(commit: commit)
@@ -323,7 +323,7 @@ private struct CommitBadge: View {
         .foregroundStyle(.secondary)
         .padding(.horizontal, 6)
         .padding(.vertical, 2)
-        .background(Color(.tertiarySystemGroupedBackground), in: Capsule())
+        .background(DS.Surface.inset, in: Capsule())
     }
 }
 

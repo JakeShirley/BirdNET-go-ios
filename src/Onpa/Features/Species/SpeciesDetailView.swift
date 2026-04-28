@@ -170,7 +170,7 @@ private struct SpeciesDetailImageView: View {
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            Color(.secondarySystemGroupedBackground)
+            DS.Surface.card
                 .overlay {
                     if let primaryURL {
                         asyncImage(url: primaryURL, fallbackURL: fallbackURL)
@@ -186,7 +186,7 @@ private struct SpeciesDetailImageView: View {
         }
         .frame(maxWidth: .infinity)
         .aspectRatio(4 / 3, contentMode: .fit)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .clipShape(DS.Shape.card)
         .accessibilityLabel("Image of \(commonName)")
     }
 
@@ -245,7 +245,7 @@ private struct SpeciesImageCreditView: View {
         .foregroundStyle(.white)
         .padding(.horizontal, 8)
         .padding(.vertical, 5)
-        .background(.black.opacity(0.62), in: Capsule())
+        .background(DS.Overlay.darkChip, in: Capsule())
         .accessibilityLabel(attribution.accessibilityLabel)
     }
 }
@@ -259,7 +259,7 @@ private struct SpeciesMetricTile: View {
         VStack(alignment: .leading, spacing: 8) {
             Image(systemName: systemImage)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.teal)
+                .foregroundStyle(DS.accent)
             Text(value)
                 .font(.headline.weight(.semibold))
                 .lineLimit(1)
@@ -271,7 +271,7 @@ private struct SpeciesMetricTile: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+        .background(DS.Surface.card, in: DS.Shape.card)
     }
 }
 
@@ -339,21 +339,21 @@ private struct WikipediaLinkChip: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
             }
-            .foregroundStyle(.teal)
+            .foregroundStyle(DS.accent)
             .padding(.horizontal, 14)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 LinearGradient(
-                    colors: [Color.teal.opacity(0.18), Color.teal.opacity(0.08)],
+                    colors: [DS.AccentTint.medium, DS.AccentTint.soft],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 ),
-                in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+                in: DS.Shape.large
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .stroke(Color.teal.opacity(0.25), lineWidth: 1)
+                DS.Shape.large
+                    .stroke(DS.AccentTint.strong, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)

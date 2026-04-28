@@ -223,7 +223,7 @@ private struct SpeciesImageView: View {
                 .aspectRatio(4 / 3, contentMode: .fit)
                 .clipped()
         }
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .clipShape(DS.Shape.card)
         .accessibilityLabel("Image of \(commonName)")
     }
 }
@@ -242,7 +242,7 @@ private struct SpeciesImageAttributionView: View {
         .foregroundStyle(.white)
         .padding(.horizontal, 8)
         .padding(.vertical, 5)
-        .background(.black.opacity(0.62), in: Capsule())
+        .background(DS.Overlay.darkChip, in: Capsule())
         .accessibilityLabel(attribution.accessibilityLabel)
     }
 }

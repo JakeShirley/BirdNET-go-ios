@@ -152,7 +152,7 @@ struct SpectrogramView: View {
             }
         }
         .aspectRatio(2, contentMode: .fit)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .clipShape(DS.Shape.card)
         .accessibilityLabel("Detection spectrogram with playback position")
     }
 

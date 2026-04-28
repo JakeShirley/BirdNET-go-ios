@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8A3F3F5F2BD8000100A11001 /* OnpaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5A2BD8000100A11001 /* OnpaApp.swift */; };
+		8A3F41011100A11001 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F41001100A11001 /* DesignSystem.swift */; };
 		8A3F3F602BD8000100A11001 /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5B2BD8000100A11001 /* AppTab.swift */; };
 		8A3F3F612BD8000100A11001 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5C2BD8000100A11001 /* RootTabView.swift */; };
 		8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5D2BD8000100A11001 /* FeedView.swift */; };
@@ -54,6 +55,7 @@
 /* Begin PBXFileReference section */
 		8A3F3F4D2BD8000100A11001 /* Onpa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Onpa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A3F3F5A2BD8000100A11001 /* OnpaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnpaApp.swift; sourceTree = "<group>"; };
+		8A3F41001100A11001 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		8A3F3F5B2BD8000100A11001 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
 		8A3F3F5C2BD8000100A11001 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		8A3F3F5D2BD8000100A11001 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				8A3F3F5A2BD8000100A11001 /* OnpaApp.swift */,
+				8A3F41001100A11001 /* DesignSystem.swift */,
 				8A3F3F5B2BD8000100A11001 /* AppTab.swift */,
 				8A3F3F5C2BD8000100A11001 /* RootTabView.swift */,
 				8A3F40792BD9000100A11001 /* AppEnvironment.swift */,
@@ -358,6 +361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A3F3F5F2BD8000100A11001 /* OnpaApp.swift in Sources */,
+				8A3F41011100A11001 /* DesignSystem.swift in Sources */,
 				8A3F3F602BD8000100A11001 /* AppTab.swift in Sources */,
 				8A3F3F612BD8000100A11001 /* RootTabView.swift in Sources */,
 				8A3F40802BD9000100A11001 /* AppEnvironment.swift in Sources */,

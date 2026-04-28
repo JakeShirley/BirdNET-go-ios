@@ -156,10 +156,10 @@ struct StatsView: View {
             if viewModel.isLoading && viewModel.dailySummary.isEmpty && viewModel.recentDetections.isEmpty {
                 ProgressView("Loading dashboard")
                     .padding(18)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+                    .background(.regularMaterial, in: DS.Shape.card)
             }
         }
-        .background(Color(.systemGroupedBackground))
+        .background(DS.Surface.grouped)
     }
 
     private var stationUnavailableView: some View {
@@ -206,9 +206,9 @@ private struct DateControlCard: View {
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.headline.weight(.semibold))
-                    .foregroundStyle(.teal)
+                    .foregroundStyle(DS.accent)
                     .frame(width: 42, height: 42)
-                    .background(Color(.tertiarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+                    .background(DS.Surface.inset, in: DS.Shape.card)
             }
             .buttonStyle(.plain)
 
@@ -227,9 +227,9 @@ private struct DateControlCard: View {
             } label: {
                 Image(systemName: "chevron.right")
                     .font(.headline.weight(.semibold))
-                    .foregroundStyle(viewModel.canAdvanceDate ? .teal : Color.secondary)
+                    .foregroundStyle(viewModel.canAdvanceDate ? DS.accent : Color.secondary)
                     .frame(width: 42, height: 42)
-                    .background(Color(.tertiarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+                    .background(DS.Surface.inset, in: DS.Shape.card)
                     .opacity(viewModel.canAdvanceDate ? 1.0 : 0.5)
             }
             .buttonStyle(.plain)
@@ -237,7 +237,7 @@ private struct DateControlCard: View {
             .accessibilityLabel("Next day")
         }
         .padding(14)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+        .background(DS.Surface.card, in: DS.Shape.card)
     }
 }
 
@@ -264,9 +264,9 @@ private struct KPITile: View {
         VStack(alignment: .leading, spacing: 8) {
             Image(systemName: systemImage)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.teal)
+                .foregroundStyle(DS.accent)
                 .frame(width: 28, height: 28)
-                .background(Color.teal.opacity(0.12), in: RoundedRectangle(cornerRadius: 6))
+                .background(DS.AccentTint.soft, in: DS.Shape.inset)
 
             Text(value)
                 .font(.title3.weight(.semibold))
@@ -281,7 +281,7 @@ private struct KPITile: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+        .background(DS.Surface.card, in: DS.Shape.card)
     }
 }
 
@@ -327,7 +327,7 @@ private struct DailyActivityCard: View {
             }
         }
         .padding(14)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+        .background(DS.Surface.card, in: DS.Shape.card)
     }
 }
 
@@ -360,7 +360,7 @@ private struct HourlyOverview: View {
             .foregroundStyle(.secondary)
         }
         .padding(10)
-        .background(Color(.tertiarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+        .background(DS.Surface.inset, in: DS.Shape.card)
     }
 }
 
@@ -508,7 +508,7 @@ private struct CurrentlyHearingCard: View {
                 Spacer()
 
                 Image(systemName: "ear.and.waveform")
-                    .foregroundStyle(.teal)
+                    .foregroundStyle(DS.accent)
             }
 
             if detections.isEmpty {
@@ -528,7 +528,7 @@ private struct CurrentlyHearingCard: View {
             }
         }
         .padding(14)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+        .background(DS.Surface.card, in: DS.Shape.card)
     }
 }
 
@@ -578,7 +578,7 @@ private struct SpeciesThumbnail: View {
                 placeholder
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .clipShape(DS.Shape.inset)
         .accessibilityLabel(name)
     }
 
@@ -615,10 +615,10 @@ private struct SpeciesThumbnail: View {
 
     private var placeholder: some View {
         ZStack {
-            Color.teal.opacity(0.14)
+            DS.AccentTint.soft
             Image(systemName: "bird")
                 .font(.caption)
-                .foregroundStyle(.teal)
+                .foregroundStyle(DS.accent)
         }
     }
 }
@@ -637,7 +637,7 @@ private struct StatusBanner: View {
         }
         .foregroundStyle(foregroundColor)
         .padding(12)
-        .background(backgroundColor, in: RoundedRectangle(cornerRadius: 8))
+        .background(backgroundColor, in: DS.Shape.card)
     }
 
     private var foregroundColor: Color {

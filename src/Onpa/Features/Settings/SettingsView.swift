@@ -58,7 +58,7 @@ struct SettingsView: View {
             if viewModel.isLoading {
                 ProgressView("Loading settings")
                     .padding(18)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+                    .background(.regularMaterial, in: DS.Shape.card)
             }
         }
         .navigationDestination(isPresented: $isChangelogPresented) {
