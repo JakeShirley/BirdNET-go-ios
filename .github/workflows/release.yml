@@ -16,7 +16,7 @@ concurrency:
 jobs:
   release:
     name: semantic-release
-    runs-on: macos-latest
+    runs-on: macos-26
     environment: AppStore
 
     steps:
@@ -33,6 +33,19 @@ jobs:
 
       - name: Install release dependencies
         run: npm ci
+
+      - name: Verify Xcode 26 SDK
+        run: |
+          xcodebuild -version
+          sdk_version="$(xcrun --sdk iphoneos --show-sdk-version)"
+          echo "iPhoneOS SDK: $sdk_version"
+          case "$sdk_version" in
+            26.*) ;;
+            *)
+              echo "::error::Expected iOS 26 SDK or newer for App Store Connect uploads, got $sdk_version"
+              exit 1
+              ;;
+          esac
 
       - name: Import Apple Distribution certificate
         uses: apple-actions/import-codesign-certs@v7

@@ -13,6 +13,7 @@ Expected release model:
 - CI publishes release notes and tags when changes land on the release branch.
 - iOS marketing versions should be derived from the semantic-release version during release automation.
 - iOS build numbers can remain CI-generated monotonic build identifiers.
+- GitHub Actions iOS jobs run on the `macos-26` image and verify the selected iOS SDK is 26.x before building.
 - Checked-in Xcode and package versions stay at `0.0.0-development`; release builds pass the semantic-release version to `xcodebuild` without committing that bump back to the repository.
 
 The release workflow intentionally does not use `@semantic-release/git`, `@semantic-release/changelog`, or any other plugin that commits generated version or changelog changes back to the repository.

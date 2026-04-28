@@ -16,11 +16,24 @@ concurrency:
 jobs:
   ios-build:
     name: iOS Build
-    runs-on: macos-latest
+    runs-on: macos-26
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Verify Xcode 26 SDK
+        run: |
+          xcodebuild -version
+          sdk_version="$(xcrun --sdk iphoneos --show-sdk-version)"
+          echo "iPhoneOS SDK: $sdk_version"
+          case "$sdk_version" in
+            26.*) ;;
+            *)
+              echo "::error::Expected iOS 26 SDK or newer, got $sdk_version"
+              exit 1
+              ;;
+          esac
 
       - name: Build iOS app
         run: |
