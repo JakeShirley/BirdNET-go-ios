@@ -7,6 +7,7 @@ struct AppConfiguration: Sendable {
     var debugSpeciesName: String?
     var debugShowsStationManagement: Bool
     var debugShowsSettings: Bool
+    var debugShowsChangelog: Bool
     var debugShowsDeleteStationConfirmation: Bool
 
     static func current(
@@ -20,6 +21,7 @@ struct AppConfiguration: Sendable {
             debugSpeciesName: debugSpeciesName(arguments: arguments, environment: environment),
             debugShowsStationManagement: debugShowsStationManagement(arguments: arguments, environment: environment),
             debugShowsSettings: debugShowsSettings(arguments: arguments, environment: environment),
+            debugShowsChangelog: debugShowsChangelog(arguments: arguments, environment: environment),
             debugShowsDeleteStationConfirmation: debugShowsDeleteStationConfirmation(arguments: arguments, environment: environment)
         )
     }
@@ -31,6 +33,7 @@ struct AppConfiguration: Sendable {
         debugSpeciesName: nil,
         debugShowsStationManagement: false,
         debugShowsSettings: false,
+        debugShowsChangelog: false,
         debugShowsDeleteStationConfirmation: false
     )
 
@@ -82,6 +85,10 @@ struct AppConfiguration: Sendable {
 
     private static func debugShowsSettings(arguments: [String], environment: [String: String]) -> Bool {
         arguments.contains("-debugShowSettings") || isEnabled(environment["BIRDNET_GO_DEBUG_SHOW_SETTINGS"])
+    }
+
+    private static func debugShowsChangelog(arguments: [String], environment: [String: String]) -> Bool {
+        arguments.contains("-debugShowChangelog") || isEnabled(environment["BIRDNET_GO_DEBUG_SHOW_CHANGELOG"])
     }
 
     private static func debugShowsDeleteStationConfirmation(arguments: [String], environment: [String: String]) -> Bool {

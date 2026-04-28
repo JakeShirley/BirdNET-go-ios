@@ -158,6 +158,7 @@ Supported debug inputs:
 - `-debugSpeciesName <name>`: open a species detail screen after the Species or Dashboard tab loads for visual simulator checks.
 - `-debugShowStationManagement`: open station management from the Dashboard navigation bar on launch for visual simulator checks.
 - `-debugShowSettings`: open settings from the Dashboard station menu on launch for visual simulator checks.
+- `-debugShowChangelog`: open the changelog screen (via Settings) on launch for visual simulator checks.
 - `-debugShowDeleteStationConfirmation`: open the delete station confirmation after station management loads for visual simulator checks.
 - `-initialTab <dashboard|feed|species>`: choose the launch tab. `stats` and `station` remain accepted as legacy aliases for `dashboard`.
 - `BIRDNET_GO_USE_LOCAL_STATION_PROFILE=1`: environment equivalent of `-useLocalStationProfile`.
@@ -166,6 +167,7 @@ Supported debug inputs:
 - `BIRDNET_GO_DEBUG_SPECIES_NAME=<name>`: environment equivalent of `-debugSpeciesName`.
 - `BIRDNET_GO_DEBUG_SHOW_STATION_MANAGEMENT=1`: environment equivalent of `-debugShowStationManagement`.
 - `BIRDNET_GO_DEBUG_SHOW_SETTINGS=1`: environment equivalent of `-debugShowSettings`.
+- `BIRDNET_GO_DEBUG_SHOW_CHANGELOG=1`: environment equivalent of `-debugShowChangelog`.
 - `BIRDNET_GO_DEBUG_SHOW_DELETE_STATION_CONFIRMATION=1`: environment equivalent of `-debugShowDeleteStationConfirmation`.
 
 The active station profile and app preferences are persisted with `UserDefaults`. Station credentials remain Keychain-only, and session cookies remain ephemeral.
@@ -202,6 +204,16 @@ The iOS app keeps foundation code in separate source areas so feature work can g
 - `src/Onpa/Networking`: BirdNET-Go API client protocols, URLSession implementations, and SSE stream parsing.
 - `src/Onpa/Storage`: storage protocols, UserDefaults-backed profile/preference persistence, local cache storage, and Keychain-backed credential storage.
 - `src/Onpa/Features`: user-facing SwiftUI feature modules such as Dashboard, Feed, DetectionDetail, Species, and Station. Feature view models own screen state and call dependencies through `AppEnvironment`.
+
+## Changelog Pipeline
+
+Settings > Changelog displays the contents of `CHANGELOG.md` bundled with the app build.
+
+- **Local development builds** ship `src/Onpa/Resources/CHANGELOG.md` as a hard-coded placeholder so the screen always renders something. Edit that file freely while iterating; do not delete it.
+- **GitHub release builds** generate a fresh root-level `CHANGELOG.md` via `@semantic-release/changelog`. `scripts/build_testflight_ipa.sh` then copies the generated file over `src/Onpa/Resources/CHANGELOG.md` immediately before `xcodebuild archive`, so the bundled changelog matches the release notes for that version. The file is also attached to the GitHub Release and committed back to `main` by `@semantic-release/git`, so future releases append to a growing history rather than overwriting it.
+- The build script restores the dev placeholder on exit (success or failure) so local working copies aren't dirtied after a release run.
+
+To preview the production changelog locally, run `npx semantic-release --dry-run --no-ci` from the repo root, then copy the generated `CHANGELOG.md` into `src/Onpa/Resources/` before rebuilding.
 
 The Feed feature keeps recent-list refresh and live streaming separate: pull-to-refresh fetches `/api/v2/detections/recent?limit=10`, while the view model's live task listens to `/api/v2/detections/stream`, deduplicates incoming detections by ID, updates the same local cache, and reconnects with capped exponential backoff.
 

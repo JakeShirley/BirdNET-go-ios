@@ -5,6 +5,13 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md",
+        "changelogTitle": "# Changelog\n\nAll notable changes to Onpa are documented here. This file is generated automatically by [semantic-release](https://github.com/semantic-release/semantic-release) on each release."
+      }
+    ],
+    [
       "@semantic-release/exec",
       {
         "prepareCmd": "bash scripts/build_testflight_ipa.sh ${nextRelease.version}"
@@ -14,7 +21,17 @@
       "@semantic-release/github",
       {
         "successComment": false,
-        "failComment": false
+        "failComment": false,
+        "assets": [
+          { "path": "CHANGELOG.md", "label": "Changelog" }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ]
   ]

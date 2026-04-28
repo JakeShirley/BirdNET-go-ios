@@ -92,7 +92,8 @@ struct StatsView: View {
     }
 
     private func openDebugDestinationIfNeeded() {
-        if appEnvironment.configuration.debugShowsSettings, !didOpenDebugSettings {
+        if appEnvironment.configuration.debugShowsSettings || appEnvironment.configuration.debugShowsChangelog,
+           !didOpenDebugSettings {
             didOpenDebugSettings = true
             isSettingsPresented = true
             return

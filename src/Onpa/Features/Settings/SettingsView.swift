@@ -3,6 +3,8 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.appEnvironment) private var appEnvironment
     @StateObject private var viewModel = SettingsViewModel()
+    @State private var isChangelogPresented = false
+    @State private var didOpenDebugChangelog = false
 
     var body: some View {
         Form {
@@ -22,6 +24,11 @@ struct SettingsView: View {
 
             Section("App") {
                 LabeledContent("Version", value: appVersion)
+                NavigationLink {
+                    ChangelogView()
+                } label: {
+                    Label("Changelog", systemImage: "list.bullet.rectangle")
+                }
             }
 
             if let statusMessage = viewModel.statusMessage {
@@ -39,9 +46,21 @@ struct SettingsView: View {
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
             }
         }
+        .navigationDestination(isPresented: $isChangelogPresented) {
+            ChangelogView()
+        }
         .task {
             await viewModel.load(environment: appEnvironment)
+            openDebugChangelogIfNeeded()
         }
+    }
+
+    private func openDebugChangelogIfNeeded() {
+        guard appEnvironment.configuration.debugShowsChangelog, !didOpenDebugChangelog else {
+            return
+        }
+        didOpenDebugChangelog = true
+        isChangelogPresented = true
     }
 
     private var appVersion: String {

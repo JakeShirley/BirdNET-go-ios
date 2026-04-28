@@ -15,6 +15,7 @@
 		8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F682BD8000100A11001 /* StatsView.swift */; };
 		8A3F3F6B2BD8000100A11001 /* StationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F6A2BD8000100A11001 /* StationView.swift */; };
 		8A3F3F702BD8000100A11001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F3F6F2BD8000100A11001 /* Assets.xcassets */; };
+		8A3F40C22BD9000D00A11001 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F40C12BD9000D00A11001 /* CHANGELOG.md */; };
 		8A3F40802BD9000100A11001 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40792BD9000100A11001 /* AppEnvironment.swift */; };
 		8A3F40812BD9000100A11001 /* StationProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407A2BD9000100A11001 /* StationProfile.swift */; };
 		8A3F40822BD9000100A11001 /* StationConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407B2BD9000100A11001 /* StationConnectionStatus.swift */; };
@@ -46,6 +47,8 @@
 		8A3F40BB2BD9000B00A11001 /* SpeciesDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40BA2BD9000B00A11001 /* SpeciesDetailViewModel.swift */; };
 		8A3F40BD2BD9000C00A11001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40BC2BD9000C00A11001 /* SettingsView.swift */; };
 		8A3F40BF2BD9000C00A11001 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40BE2BD9000C00A11001 /* SettingsViewModel.swift */; };
+		8A3F40D12BD9000E00A11001 /* ChangelogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40D02BD9000E00A11001 /* ChangelogView.swift */; };
+		8A3F40D32BD9000E00A11001 /* ChangelogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40D22BD9000E00A11001 /* ChangelogViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +71,7 @@
 		8A3F408E2BD9000200A11001 /* KeychainStationCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStationCredentialStore.swift; sourceTree = "<group>"; };
 		8A3F408F2BD9000200A11001 /* StationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationViewModel.swift; sourceTree = "<group>"; };
 		8A3F40922BD9000200A11001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A3F40C12BD9000D00A11001 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		8A3F40932BD9000300A11001 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		8A3F40952BD9000300A11001 /* UserDefaultsStationProfileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStationProfileStore.swift; sourceTree = "<group>"; };
 		8A3F40972BD9000300A11001 /* AppPreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferenceStore.swift; sourceTree = "<group>"; };
@@ -90,6 +94,8 @@
 		8A3F40BA2BD9000B00A11001 /* SpeciesDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesDetailViewModel.swift; sourceTree = "<group>"; };
 		8A3F40BC2BD9000C00A11001 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8A3F40BE2BD9000C00A11001 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		8A3F40D02BD9000E00A11001 /* ChangelogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangelogView.swift; sourceTree = "<group>"; };
+		8A3F40D22BD9000E00A11001 /* ChangelogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangelogViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +159,7 @@
 				8A3F3F572BD8000100A11001 /* Stats */,
 				8A3F3F582BD8000100A11001 /* Station */,
 				8A3F40C02BD9000C00A11001 /* Settings */,
+				8A3F40D42BD9000E00A11001 /* Changelog */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -204,11 +211,21 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		8A3F40D42BD9000E00A11001 /* Changelog */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F40D02BD9000E00A11001 /* ChangelogView.swift */,
+				8A3F40D22BD9000E00A11001 /* ChangelogViewModel.swift */,
+			);
+			path = Changelog;
+			sourceTree = "<group>";
+		};
 		8A3F3F6E2BD8000100A11001 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				8A3F40922BD9000200A11001 /* Info.plist */,
 				8A3F3F6F2BD8000100A11001 /* Assets.xcassets */,
+				8A3F40C12BD9000D00A11001 /* CHANGELOG.md */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -329,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A3F3F702BD8000100A11001 /* Assets.xcassets in Resources */,
+				8A3F40C22BD9000D00A11001 /* CHANGELOG.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +395,8 @@
 				8A3F3F6B2BD8000100A11001 /* StationView.swift in Sources */,
 				8A3F40BD2BD9000C00A11001 /* SettingsView.swift in Sources */,
 				8A3F40BF2BD9000C00A11001 /* SettingsViewModel.swift in Sources */,
+				8A3F40D12BD9000E00A11001 /* ChangelogView.swift in Sources */,
+				8A3F40D32BD9000E00A11001 /* ChangelogViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
