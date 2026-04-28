@@ -9,6 +9,12 @@ final class SpeciesViewModel: ObservableObject {
     @Published private(set) var statusKind: StatusKind = .neutral
     @Published private(set) var isLoading = false
     @Published private(set) var didLoad = false
+    @Published var sortMode: SortMode = .mostSeen {
+        didSet {
+            guard oldValue != sortMode else { return }
+            species = Self.sorted(species, by: sortMode)
+        }
+    }
 
     private let recentDetectionsLimit = 100
     private let decoder = JSONDecoder()
@@ -225,24 +231,60 @@ final class SpeciesViewModel: ObservableObject {
             )
         }
 
-        return entriesByKey.values.sorted { lhs, rhs in
-            switch (lhs.latestDetectionDate, rhs.latestDetectionDate) {
-            case let (lhsDate?, rhsDate?) where lhsDate != rhsDate:
-                return lhsDate > rhsDate
-            case (_?, nil):
-                return true
-            case (nil, _?):
-                return false
-            default:
-                break
+        return Self.sorted(Array(entriesByKey.values), by: sortMode)
+    }
+
+    /// Bayesian smoothing constant ("phantom detections") used by the reliability sort.
+    /// Higher values penalize species with few detections more aggressively.
+    private static let reliabilityPriorWeight: Double = 20
+
+    /// Default fallback prior used when no species in the current set has an avg confidence.
+    /// Roughly the BirdNET-Go default minimum acceptable confidence.
+    private static let reliabilityFallbackPrior: Double = 0.75
+
+    static func sorted(_ entries: [SpeciesListEntry], by sortMode: SortMode) -> [SpeciesListEntry] {
+        switch sortMode {
+        case .reliability:
+            let confidences = entries.compactMap { $0.stats.avgConfidence }
+            let prior: Double
+            if confidences.isEmpty {
+                prior = reliabilityFallbackPrior
+            } else {
+                prior = confidences.reduce(0, +) / Double(confidences.count)
             }
 
-            if lhs.displayCount != rhs.displayCount {
-                return lhs.displayCount > rhs.displayCount
+            // Cache scores so the comparator stays O(1) and we don't recompute the
+            // smoothed average for every pairwise comparison.
+            let scored: [(entry: SpeciesListEntry, score: Double?)] = entries.map { entry in
+                let score = bayesianReliabilityScore(for: entry, prior: prior)
+                return (entry, score)
             }
 
-            return lhs.species.commonName.localizedCaseInsensitiveCompare(rhs.species.commonName) == .orderedAscending
+            return scored.sorted { lhs, rhs in
+                switch (lhs.score, rhs.score) {
+                case let (l?, r?) where l != r:
+                    return l > r
+                case (_?, nil):
+                    return true
+                case (nil, _?):
+                    return false
+                default:
+                    break
+                }
+                return SortMode.tiebreaker(lhs.entry, rhs.entry)
+            }.map(\.entry)
+        case .mostSeen, .leastSeen, .mostRecent:
+            return entries.sorted(by: sortMode.areInIncreasingOrder)
         }
+    }
+
+    static func bayesianReliabilityScore(for entry: SpeciesListEntry, prior: Double) -> Double? {
+        guard let avg = entry.stats.avgConfidence else {
+            return nil
+        }
+        let count = Double(entry.stats.count)
+        let c = reliabilityPriorWeight
+        return (count * avg + c * prior) / (count + c)
     }
 
     private func detectionRollups(from detections: [BirdDetection]) -> [String: DetectionRollup] {
@@ -411,6 +453,72 @@ private struct SpeciesSnapshot: Codable {
 }
 
 extension SpeciesViewModel {
+    enum SortMode: String, CaseIterable, Identifiable, Sendable {
+        case mostSeen
+        case leastSeen
+        case mostRecent
+        case reliability
+
+        var id: String { rawValue }
+
+        var label: LocalizedStringKey {
+            switch self {
+            case .reliability: return "Reliability"
+            case .mostSeen: return "Most Seen"
+            case .leastSeen: return "Least Seen"
+            case .mostRecent: return "Most Recent"
+            }
+        }
+
+        var systemImage: String {
+            switch self {
+            case .reliability: return "checkmark.seal"
+            case .mostSeen: return "arrow.down.circle"
+            case .leastSeen: return "arrow.up.circle"
+            case .mostRecent: return "clock"
+            }
+        }
+
+        func areInIncreasingOrder(_ lhs: SpeciesListEntry, _ rhs: SpeciesListEntry) -> Bool {
+            switch self {
+            case .reliability:
+                // Reliability sort is handled by SpeciesViewModel.sorted(_:by:) which
+                // needs the global prior; this comparator is only a defensive fallback.
+                if lhs.displayCount != rhs.displayCount {
+                    return lhs.displayCount > rhs.displayCount
+                }
+            case .mostSeen:
+                if lhs.displayCount != rhs.displayCount {
+                    return lhs.displayCount > rhs.displayCount
+                }
+            case .leastSeen:
+                if lhs.displayCount != rhs.displayCount {
+                    return lhs.displayCount < rhs.displayCount
+                }
+            case .mostRecent:
+                switch (lhs.latestDetectionDate, rhs.latestDetectionDate) {
+                case let (l?, r?) where l != r:
+                    return l > r
+                case (_?, nil):
+                    return true
+                case (nil, _?):
+                    return false
+                default:
+                    break
+                }
+            }
+
+            return Self.tiebreaker(lhs, rhs)
+        }
+
+        static func tiebreaker(_ lhs: SpeciesListEntry, _ rhs: SpeciesListEntry) -> Bool {
+            if let lhsDate = lhs.latestDetectionDate, let rhsDate = rhs.latestDetectionDate, lhsDate != rhsDate {
+                return lhsDate > rhsDate
+            }
+            return lhs.species.commonName.localizedCaseInsensitiveCompare(rhs.species.commonName) == .orderedAscending
+        }
+    }
+
     enum StatusKind {
         case neutral
         case warning

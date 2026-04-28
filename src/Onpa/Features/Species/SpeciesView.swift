@@ -45,6 +45,22 @@ struct SpeciesView: View {
         .navigationTitle("Species")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Picker(selection: $viewModel.sortMode) {
+                        ForEach(SpeciesViewModel.SortMode.allCases) { mode in
+                            Label(mode.label, systemImage: mode.systemImage).tag(mode)
+                        }
+                    } label: {
+                        Text("Sort By")
+                    }
+                    .pickerStyle(.inline)
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                }
+                .accessibilityLabel("Sort species")
+            }
+
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     Task { await viewModel.refresh(environment: appEnvironment) }
                 } label: {
