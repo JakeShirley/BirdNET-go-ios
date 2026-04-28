@@ -88,7 +88,7 @@ struct StatsView: View {
     }
 
     private var stationMenuActionTitle: String {
-        viewModel.hasStation ? "Manage or Switch Station" : "Connect Station"
+        viewModel.hasStation ? "Manage or Switch Station" : "Connect to Station"
     }
 
     private func openDebugDestinationIfNeeded() {
@@ -174,7 +174,10 @@ struct StatsView: View {
                 Button {
                     isStationManagementPresented = true
                 } label: {
-                    Label("Connect Station", systemImage: "antenna.radiowaves.left.and.right")
+                    HStack(spacing: 8) {
+                        Image(systemName: "antenna.radiowaves.left.and.right")
+                        Text("Connect to Station")
+                    }
                 }
                 .buttonStyle(.borderedProminent)
             }
