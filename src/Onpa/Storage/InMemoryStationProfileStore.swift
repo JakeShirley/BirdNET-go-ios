@@ -1,15 +1,37 @@
+import Foundation
+
 actor InMemoryStationProfileStore: StationProfileStore {
-    private var activeProfile: StationProfile?
+    private var profiles: [StationProfile]
+    private var activeProfileID: UUID?
 
     init(activeProfile: StationProfile? = nil) {
-        self.activeProfile = activeProfile
+        if let activeProfile {
+            self.profiles = [activeProfile]
+            self.activeProfileID = activeProfile.id
+        } else {
+            self.profiles = []
+            self.activeProfileID = nil
+        }
     }
 
-    func loadActiveProfile() async throws -> StationProfile? {
-        activeProfile
+    init(profiles: [StationProfile], activeProfileID: UUID? = nil) {
+        self.profiles = profiles
+        self.activeProfileID = activeProfileID ?? profiles.first?.id
     }
 
-    func saveActiveProfile(_ profile: StationProfile?) async throws {
-        activeProfile = profile
+    func loadProfiles() async throws -> [StationProfile] {
+        profiles
+    }
+
+    func saveProfiles(_ profiles: [StationProfile]) async throws {
+        self.profiles = profiles
+    }
+
+    func loadActiveProfileID() async throws -> UUID? {
+        activeProfileID
+    }
+
+    func saveActiveProfileID(_ id: UUID?) async throws {
+        activeProfileID = id
     }
 }

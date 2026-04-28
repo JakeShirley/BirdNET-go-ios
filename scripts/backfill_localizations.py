@@ -430,6 +430,88 @@ TRANSLATIONS = {
         "de": "Verwende HTTPS für entfernte Hosts oder verbinde dich mit localhost, einer privaten IP oder einer .local-Adresse.",
         "ja": "リモートホストには HTTPS を使用するか、localhost、プライベート IP、.local アドレスに接続してください。",
     },
+    # CON-008 multi-profile UI
+    "Add Station": {"es": "Añadir estación", "de": "Station hinzufügen", "ja": "ステーションを追加"},
+    "Add station": {"es": "Añadir estación", "de": "Station hinzufügen", "ja": "ステーションを追加"},
+    "Stations": {"es": "Estaciones", "de": "Stationen", "ja": "ステーション"},
+    "Switch Station": {"es": "Cambiar estación", "de": "Station wechseln", "ja": "ステーションを切り替え"},
+    "New Station": {"es": "Nueva estación", "de": "Neue Station", "ja": "新しいステーション"},
+    "Connect Station": {"es": "Conectar estación", "de": "Station verbinden", "ja": "ステーションに接続"},
+    "Rename": {"es": "Renombrar", "de": "Umbenennen", "ja": "名前を変更"},
+    "Rename Station": {"es": "Renombrar estación", "de": "Station umbenennen", "ja": "ステーションの名前を変更"},
+    "Station name": {"es": "Nombre de la estación", "de": "Stationsname", "ja": "ステーション名"},
+    "Save": {"es": "Guardar", "de": "Speichern", "ja": "保存"},
+    "Delete": {"es": "Eliminar", "de": "Löschen", "ja": "削除"},
+    "Choose a new name for %@.": {
+        "es": "Elige un nuevo nombre para %@.",
+        "de": "Wähle einen neuen Namen für %@.",
+        "ja": "%@ の新しい名前を選択してください。",
+    },
+    "Switched to %@.": {
+        "es": "Cambiado a %@.",
+        "de": "Gewechselt zu %@.",
+        "ja": "%@ に切り替えました。",
+    },
+    "Switches to this station": {
+        "es": "Cambia a esta estación",
+        "de": "Wechselt zu dieser Station",
+        "ja": "このステーションに切り替えます",
+    },
+    "Renamed station to %@.": {
+        "es": "Estación renombrada a %@.",
+        "de": "Station umbenannt in %@.",
+        "ja": "ステーション名を %@ に変更しました。",
+    },
+    "Removed %@.": {
+        "es": "Se eliminó %@.",
+        "de": "%@ entfernt.",
+        "ja": "%@ を削除しました。",
+    },
+    "Removes the active station and any stored credentials on this device.": {
+        "es": "Elimina la estación activa y cualquier credencial almacenada en este dispositivo.",
+        "de": "Entfernt die aktive Station und alle hinterlegten Anmeldedaten von diesem Gerät.",
+        "ja": "アクティブなステーションとこのデバイスに保存された認証情報を削除します。",
+    },
+    "This removes %@ and any stored credentials from this device.": {
+        "es": "Esto elimina %@ y cualquier credencial almacenada en este dispositivo.",
+        "de": "Dies entfernt %@ und alle hinterlegten Anmeldedaten von diesem Gerät.",
+        "ja": "このデバイスから %@ と保存された認証情報を削除します。",
+    },
+    "Not validated yet": {
+        "es": "Aún no validada",
+        "de": "Noch nicht validiert",
+        "ja": "未検証",
+    },
+    "Station connected.": {
+        "es": "Estación conectada.",
+        "de": "Station verbunden.",
+        "ja": "ステーションに接続しました。",
+    },
+    "Station connected. Login required.": {
+        "es": "Estación conectada. Inicio de sesión requerido.",
+        "de": "Station verbunden. Anmeldung erforderlich.",
+        "ja": "ステーションに接続しました。ログインが必要です。",
+    },
+    "Logged in.": {
+        "es": "Sesión iniciada.",
+        "de": "Angemeldet.",
+        "ja": "ログインしました。",
+    },
+    "Authenticated.": {
+        "es": "Autenticado.",
+        "de": "Authentifiziert.",
+        "ja": "認証済み。",
+    },
+    "Not authenticated.": {
+        "es": "No autenticado.",
+        "de": "Nicht authentifiziert.",
+        "ja": "未認証。",
+    },
+    "Password is required.": {
+        "es": "Se requiere la contraseña.",
+        "de": "Passwort erforderlich.",
+        "ja": "パスワードが必要です。",
+    },
 }
 
 
@@ -437,11 +519,17 @@ def main() -> None:
     catalog = json.loads(CATALOG.read_text())
     strings = catalog["strings"]
 
-    # 1. Drop entries that are completely empty (no localizations at all).
-    #    These tend to be xcstringstool placeholder leftovers like "%arg".
+    # 1. Drop entries that are clearly stale extractor artifacts. xcstringstool
+    #    sometimes emits a "%arg" / "%arg detections today" sibling alongside
+    #    the real "%@" / "%lld" entries, and an empty "" key when its diff
+    #    becomes confused. Both are safe to remove because the real keys are
+    #    the ones referenced from source.
     drop_keys = []
     for key, entry in strings.items():
-        if not entry.get("localizations") and not entry.get("comment"):
+        if key == "":
+            drop_keys.append(key)
+            continue
+        if "%arg" in key:
             drop_keys.append(key)
     for key in drop_keys:
         del strings[key]
@@ -456,7 +544,9 @@ def main() -> None:
                 "stringUnit": {"state": "translated", "value": key}
             }
         for lang in ("es", "de", "ja"):
-            if lang in localizations:
+            existing = localizations.get(lang)
+            existing_value = existing.get("stringUnit", {}).get("value") if existing else None
+            if existing_value:
                 continue
             translation = TRANSLATIONS.get(key, {}).get(lang)
             if translation is None:

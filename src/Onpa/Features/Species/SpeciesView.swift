@@ -70,6 +70,9 @@ struct SpeciesView: View {
                 SpeciesDetailView(entry: debugSpeciesEntry)
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .activeStationProfileDidChange)) { _ in
+            Task { await viewModel.refresh(environment: appEnvironment) }
+        }
     }
 
     private var debugSpeciesDetailIsPresented: Binding<Bool> {

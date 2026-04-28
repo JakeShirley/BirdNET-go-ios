@@ -85,6 +85,9 @@ struct FeedView: View {
         .refreshable {
             await viewModel.refresh(environment: appEnvironment)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .activeStationProfileDidChange)) { _ in
+            Task { await viewModel.refresh(environment: appEnvironment) }
+        }
     }
 }
 

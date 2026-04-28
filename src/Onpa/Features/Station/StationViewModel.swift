@@ -7,16 +7,25 @@ final class StationViewModel: ObservableObject {
     @Published var username = ""
     @Published var password = ""
     @Published var rememberCredentials = true
+    @Published private(set) var profiles: [StationProfile] = []
+    @Published private(set) var activeProfileID: UUID?
     @Published private(set) var connectionReport: StationConnectionReport?
     @Published private(set) var authStatus: StationAuthStatus?
     @Published private(set) var statusMessage: String?
     @Published private(set) var statusKind: StatusKind = .neutral
     @Published private(set) var diagnosticsBundleURL: URL?
     @Published private(set) var isBusy = false
-    @Published private(set) var activeProfile: StationProfile?
-    @Published private(set) var canDeleteStation = false
 
     private var didLoad = false
+
+    var activeProfile: StationProfile? {
+        guard let activeProfileID else { return nil }
+        return profiles.first { $0.id == activeProfileID }
+    }
+
+    var canDeleteActiveProfile: Bool {
+        activeProfile != nil
+    }
 
     var canLogIn: Bool {
         connectionReport?.appConfig.security.authConfig.basicEnabled == true
@@ -27,40 +36,41 @@ final class StationViewModel: ObservableObject {
     }
 
     func load(environment: AppEnvironment) async {
-        guard !didLoad else {
-            return
-        }
-
+        guard !didLoad else { return }
         didLoad = true
 
         do {
             let preferences = try await environment.preferenceStore.loadPreferences()
             rememberCredentials = preferences.rememberStationCredentials
 
-            let storedProfile = try await environment.stationProfileStore.loadActiveProfile()
+            profiles = try await environment.stationProfileStore.loadProfiles()
+            activeProfileID = try await environment.stationProfileStore.loadActiveProfileID()
+
             let overrideProfile = environment.configuration.stationURLOverride.map(StationProfile.manual(baseURL:))
-            guard let profile = overrideProfile ?? storedProfile ?? environment.configuration.localNetworkTestProfile else {
-                return
+
+            if let overrideProfile {
+                applyActiveProfile(overrideProfile)
+                setMessage(String(localized: "Using debug station URL override."), kind: .neutral)
+            } else if let active = activeProfile {
+                applyActiveProfile(active, environment: environment)
+            } else if let testProfile = environment.configuration.localNetworkTestProfile {
+                applyActiveProfile(testProfile)
+                setMessage(String(localized: "Loaded local test station profile."), kind: .neutral)
             }
 
-            activeProfile = profile
-            canDeleteStation = overrideProfile == nil && storedProfile != nil
-            baseURLText = profile.baseURL.absoluteString
-            if let credentials = try await environment.credentialStore.loadCredentials(for: profile) {
+            if let active = activeProfile,
+               let credentials = try await environment.credentialStore.loadCredentials(for: active) {
                 username = credentials.username ?? ""
                 password = credentials.password
-            }
-
-            if environment.configuration.stationURLOverride != nil {
-                setMessage(String(localized: "Using debug station URL override."), kind: .neutral)
-            } else if storedProfile == nil, environment.configuration.localNetworkTestProfile != nil {
-                setMessage(String(localized: "Loaded local test station profile."), kind: .neutral)
             }
         } catch {
             setMessage(error.userFacingMessage, kind: .warning)
         }
     }
 
+    /// Validates the URL in `baseURLText`, persists the resulting profile,
+    /// and switches the app to it. Used both for adding the very first
+    /// station and for adding subsequent ones.
     func connect(environment: AppEnvironment) async {
         await performBusyOperation {
             let baseURL = try StationURLValidator.normalizedURL(from: baseURLText)
@@ -68,12 +78,12 @@ final class StationViewModel: ObservableObject {
                 throw StationConnectionError.insecurePlainHTTP
             }
 
-            let profile = StationProfile.manual(baseURL: baseURL)
-            let report = try await environment.apiClient.validateConnection(station: profile)
-            try await environment.stationProfileStore.saveActiveProfile(profile)
+            let existing = profiles.first { $0.baseURL == baseURL }
+            let profile = existing ?? StationProfile.manual(baseURL: baseURL)
 
-            activeProfile = profile
-            canDeleteStation = true
+            let report = try await environment.apiClient.validateConnection(station: profile)
+
+            try await upsertAndActivate(profile, environment: environment)
             connectionReport = report
             authStatus = nil
             baseURLText = baseURL.absoluteString
@@ -81,31 +91,116 @@ final class StationViewModel: ObservableObject {
             if let credentials = try await environment.credentialStore.loadCredentials(for: profile) {
                 username = credentials.username ?? ""
                 password = credentials.password
+            } else {
+                username = ""
+                password = ""
             }
 
-            let message = report.requiresAuthentication ? "Station connected. Login required." : "Station connected."
+            let message = report.requiresAuthentication
+                ? String(localized: "Station connected. Login required.")
+                : String(localized: "Station connected.")
             setMessage(message, kind: .success)
         }
     }
 
-    func deleteStation(environment: AppEnvironment) async {
+    /// Switches the active profile to an existing entry without re-validating.
+    /// The dependent view models will pick the new profile up on their next
+    /// load/refresh cycle.
+    func switchProfile(to profile: StationProfile, environment: AppEnvironment) async {
         await performBusyOperation {
-            let profile = try await currentProfile(environment: environment)
+            guard profiles.contains(where: { $0.id == profile.id }) else {
+                throw StationConnectionError.invalidURL
+            }
 
-            try await environment.credentialStore.deleteCredentials(for: profile)
-            try await environment.stationProfileStore.saveActiveProfile(nil)
-
-            activeProfile = nil
-            canDeleteStation = false
+            try await environment.stationProfileStore.saveActiveProfileID(profile.id)
+            activeProfileID = profile.id
             connectionReport = nil
             authStatus = nil
-            diagnosticsBundleURL = nil
-            baseURLText = ""
-            username = ""
-            password = ""
+            baseURLText = profile.baseURL.absoluteString
 
-            setMessage(String(localized: "Station deleted."), kind: .success)
+            if let credentials = try await environment.credentialStore.loadCredentials(for: profile) {
+                username = credentials.username ?? ""
+                password = credentials.password
+            } else {
+                username = ""
+                password = ""
+            }
+
+            postActiveProfileDidChangeNotification()
+            setMessage(String(localized: "Switched to \(profile.name)."), kind: .success)
         }
+    }
+
+    /// Renames a stored profile and persists the change.
+    func renameProfile(_ profile: StationProfile, to newName: String, environment: AppEnvironment) async {
+        await performBusyOperation {
+            let trimmed = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { return }
+
+            guard let index = profiles.firstIndex(where: { $0.id == profile.id }) else { return }
+            profiles[index].name = trimmed
+            try await environment.stationProfileStore.saveProfiles(profiles)
+
+            if profile.id == activeProfileID {
+                postActiveProfileDidChangeNotification()
+            }
+            setMessage(String(localized: "Renamed station to \(trimmed)."), kind: .success)
+        }
+    }
+
+    /// Removes a specific profile (active or otherwise). When the active
+    /// profile is removed, the next remaining profile (if any) becomes
+    /// active automatically.
+    func deleteProfile(_ profile: StationProfile, environment: AppEnvironment) async {
+        await performBusyOperation {
+            try await environment.credentialStore.deleteCredentials(for: profile)
+
+            profiles.removeAll { $0.id == profile.id }
+            try await environment.stationProfileStore.saveProfiles(profiles)
+
+            if profile.id == activeProfileID {
+                let nextActive = profiles.first
+                try await environment.stationProfileStore.saveActiveProfileID(nextActive?.id)
+                activeProfileID = nextActive?.id
+                connectionReport = nil
+                authStatus = nil
+                diagnosticsBundleURL = nil
+
+                if let nextActive {
+                    baseURLText = nextActive.baseURL.absoluteString
+                    if let credentials = try await environment.credentialStore.loadCredentials(for: nextActive) {
+                        username = credentials.username ?? ""
+                        password = credentials.password
+                    } else {
+                        username = ""
+                        password = ""
+                    }
+                } else {
+                    baseURLText = ""
+                    username = ""
+                    password = ""
+                }
+
+                postActiveProfileDidChangeNotification()
+            }
+
+            setMessage(String(localized: "Removed \(profile.name)."), kind: .success)
+        }
+    }
+
+    /// Convenience wrapper that deletes the currently active profile.
+    func deleteActiveProfile(environment: AppEnvironment) async {
+        guard let active = activeProfile else { return }
+        await deleteProfile(active, environment: environment)
+    }
+
+    /// Clears the connect form so the user can enter a new station URL.
+    func prepareForNewStation() {
+        baseURLText = ""
+        username = ""
+        password = ""
+        connectionReport = nil
+        authStatus = nil
     }
 
     func logIn(environment: AppEnvironment) async {
@@ -114,7 +209,7 @@ final class StationViewModel: ObservableObject {
             let trimmedUsername = username.trimmingCharacters(in: .whitespacesAndNewlines)
             let credentials = StationCredentials(username: trimmedUsername.isEmpty ? nil : trimmedUsername, password: password)
             guard !credentials.password.isEmpty else {
-                throw StationConnectionError.serverRejected(statusCode: 400, message: "Password is required.")
+                throw StationConnectionError.serverRejected(statusCode: 400, message: String(localized: "Password is required."))
             }
 
             let response = try await environment.apiClient.login(station: report.profile, credentials: credentials, csrfToken: report.appConfig.csrfToken)
@@ -126,7 +221,7 @@ final class StationViewModel: ObservableObject {
                 try await environment.credentialStore.saveCredentials(credentials, for: report.profile)
             }
 
-            setMessage(status.authenticated ? "Logged in." : response.message, kind: response.success ? .success : .warning)
+            setMessage(status.authenticated ? String(localized: "Logged in.") : response.message, kind: response.success ? .success : .warning)
         }
     }
 
@@ -152,11 +247,11 @@ final class StationViewModel: ObservableObject {
     func generateDiagnostics(environment: AppEnvironment) async {
         await performBusyOperation {
             let preferences = try? await environment.preferenceStore.loadPreferences()
-            let activeProfile = try? await environment.stationProfileStore.loadActiveProfile()
+            let active = activeProfile
             diagnosticsBundleURL = try await environment.diagnosticsService.makeDiagnosticsBundle(
                 snapshot: DiagnosticsSnapshot(
                     configuration: environment.configuration,
-                    activeProfile: activeProfile,
+                    activeProfile: active,
                     preferences: preferences,
                     connectionReport: connectionReport,
                     authStatus: authStatus,
@@ -171,8 +266,35 @@ final class StationViewModel: ObservableObject {
         await performBusyOperation {
             let report = try await ensureConnected(environment: environment)
             authStatus = try await environment.apiClient.authStatus(station: report.profile)
-            setMessage(authStatus?.authenticated == true ? "Authenticated." : "Not authenticated.", kind: .neutral)
+            setMessage(
+                authStatus?.authenticated == true ? String(localized: "Authenticated.") : String(localized: "Not authenticated."),
+                kind: .neutral
+            )
         }
+    }
+
+    // MARK: - Helpers
+
+    private func applyActiveProfile(_ profile: StationProfile, environment: AppEnvironment? = nil) {
+        if !profiles.contains(where: { $0.id == profile.id }) {
+            profiles.append(profile)
+        }
+        activeProfileID = profile.id
+        baseURLText = profile.baseURL.absoluteString
+    }
+
+    private func upsertAndActivate(_ profile: StationProfile, environment: AppEnvironment) async throws {
+        if let index = profiles.firstIndex(where: { $0.id == profile.id }) {
+            profiles[index] = profile
+        } else if let index = profiles.firstIndex(where: { $0.baseURL == profile.baseURL }) {
+            profiles[index] = profile
+        } else {
+            profiles.append(profile)
+        }
+        try await environment.stationProfileStore.saveProfiles(profiles)
+        try await environment.stationProfileStore.saveActiveProfileID(profile.id)
+        activeProfileID = profile.id
+        postActiveProfileDidChangeNotification()
     }
 
     private func ensureConnected(environment: AppEnvironment) async throws -> StationConnectionReport {
@@ -185,30 +307,13 @@ final class StationViewModel: ObservableObject {
             throw StationConnectionError.insecurePlainHTTP
         }
 
-        let profile = StationProfile.manual(baseURL: baseURL)
+        let existing = profiles.first { $0.baseURL == baseURL }
+        let profile = existing ?? StationProfile.manual(baseURL: baseURL)
         let report = try await environment.apiClient.validateConnection(station: profile)
-        try await environment.stationProfileStore.saveActiveProfile(profile)
-        activeProfile = profile
-        canDeleteStation = true
+        try await upsertAndActivate(profile, environment: environment)
         connectionReport = report
         baseURLText = baseURL.absoluteString
         return report
-    }
-
-    private func currentProfile(environment: AppEnvironment) async throws -> StationProfile {
-        guard canDeleteStation else {
-            throw StationConnectionError.invalidURL
-        }
-
-        if let activeProfile {
-            return activeProfile
-        }
-
-        if let storedProfile = try await environment.stationProfileStore.loadActiveProfile() {
-            return storedProfile
-        }
-
-        throw StationConnectionError.invalidURL
     }
 
     private func performBusyOperation(_ operation: () async throws -> Void) async {
@@ -230,10 +335,20 @@ final class StationViewModel: ObservableObject {
     private func saveCurrentPreferences(environment: AppEnvironment) async throws {
         var preferences = try await environment.preferenceStore.loadPreferences()
         preferences.rememberStationCredentials = rememberCredentials
-        try await environment.preferenceStore.savePreferences(
-            preferences
-        )
+        try await environment.preferenceStore.savePreferences(preferences)
     }
+
+    private func postActiveProfileDidChangeNotification() {
+        NotificationCenter.default.post(name: .activeStationProfileDidChange, object: nil)
+    }
+}
+
+extension Notification.Name {
+    /// Posted on the main actor whenever the active station profile changes
+    /// (switch, rename, delete, or new connection). Feature view models
+    /// listen for this so they can drop cached state and reload against the
+    /// new profile.
+    static let activeStationProfileDidChange = Notification.Name("OnpaActiveStationProfileDidChange")
 }
 
 extension StationViewModel {

@@ -34,7 +34,17 @@ struct StatsView: View {
                         Label("Settings", systemImage: "gearshape")
                     }
 
-                    if let stationProfile = viewModel.stationProfile {
+                    if viewModel.availableProfiles.count > 1 {
+                        Section("Switch Station") {
+                            ForEach(viewModel.availableProfiles) { profile in
+                                Button {
+                                    Task { await viewModel.switchProfile(to: profile, environment: appEnvironment) }
+                                } label: {
+                                    Label(profile.name, systemImage: profile.id == viewModel.stationProfile?.id ? "checkmark.circle.fill" : "circle")
+                                }
+                            }
+                        }
+                    } else if let stationProfile = viewModel.stationProfile {
                         Section("Current") {
                             Label(stationProfile.name, systemImage: "checkmark.circle")
                             Text(stationProfile.baseURL.absoluteString)
@@ -72,6 +82,9 @@ struct StatsView: View {
                 return
             }
 
+            Task { await viewModel.refresh(environment: appEnvironment) }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .activeStationProfileDidChange)) { _ in
             Task { await viewModel.refresh(environment: appEnvironment) }
         }
         .navigationDestination(isPresented: debugSpeciesDetailIsPresented) {

@@ -4,6 +4,7 @@ import SwiftUI
 @MainActor
 final class StatsViewModel: ObservableObject {
     @Published private(set) var stationProfile: StationProfile?
+    @Published private(set) var availableProfiles: [StationProfile] = []
     @Published private(set) var dailySummary: [DailySpeciesSummary] = []
     @Published private(set) var recentDetections: [BirdDetection] = []
     @Published private(set) var selectedDate = Calendar.current.startOfDay(for: Date())
@@ -19,6 +20,23 @@ final class StatsViewModel: ObservableObject {
 
     var hasStation: Bool {
         stationProfile != nil
+    }
+
+    /// Switches the active station profile (without re-validating) and
+    /// triggers a refresh against the new profile.
+    func switchProfile(to profile: StationProfile, environment: AppEnvironment) async {
+        do {
+            try await environment.stationProfileStore.saveActiveProfileID(profile.id)
+            NotificationCenter.default.post(name: .activeStationProfileDidChange, object: nil)
+            await refresh(environment: environment)
+        } catch {
+            setMessage(error.userFacingMessage, kind: .error)
+        }
+    }
+
+    /// Re-reads the available profile list from the store.
+    func reloadAvailableProfiles(environment: AppEnvironment) async {
+        availableProfiles = (try? await environment.stationProfileStore.loadProfiles()) ?? []
     }
 
     var selectedDateTitle: String {
@@ -73,6 +91,8 @@ final class StatsViewModel: ObservableObject {
     func refresh(environment: AppEnvironment) async {
         isLoading = true
         defer { isLoading = false }
+
+        await reloadAvailableProfiles(environment: environment)
 
         do {
             guard let profile = try await loadStationProfile(environment: environment) else {

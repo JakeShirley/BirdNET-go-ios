@@ -172,7 +172,7 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 | CON-005 | not-started | CSRF handling | Fetch and attach CSRF token for mutations. |
 | CON-006 | not-started | Local network discovery | Explore Bonjour/mDNS or subnet scan if BirdNET-Go exposes discoverable metadata. |
 | CON-007 | not-started | Self-signed TLS flow | Explicit user approval, certificate fingerprint display, revocation/reset. |
-| CON-008 | not-started | Multiple station profiles | Add, switch, rename, and remove stations. |
+| CON-008 | done | Multiple station profiles | UserDefaults-backed multi-profile store with migration from the legacy single-profile key. Station Management lists every saved station with active checkmark, swipe to rename or delete, and a toolbar Add Station affordance. Dashboard toolbar menu lists profiles for one-tap switching. Switching the active profile broadcasts an activeStationProfileDidChange notification so Stats, Feed, and Species refresh against the new station automatically. |
 | CON-009 | not-started | Remote access guidance | Handle Cloudflare tunnel, reverse proxy, VPN, and local-only stations. |
 | CON-010 | not-started | Auth mode expansion | Add API key, token, OAuth/OIDC, and local subnet-aware UX as needed. |
 | CON-011 | not-started | Passkey/OIDC readiness | Support only if BirdNET-Go or a configured auth provider exposes compatible flows. |
