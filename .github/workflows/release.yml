@@ -68,16 +68,24 @@ jobs:
         run: npm run release || true
 
       - name: Get release notes
+        id: release-notes
         run: |
           tag="$(git describe --tags --abbrev=0 2>/dev/null || echo "")"
+          notes=""
           if [[ -n "$tag" && -f build/TestFlight/export/Onpa.ipa ]]; then
-            release_notes="$(gh api repos/${{ github.repository }}/releases/tags/"$tag" --jq '.body' || echo "")"
-            echo "notes<<EOF" >> $GITHUB_OUTPUT
-            echo "$release_notes" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          else
-            echo "notes=" >> $GITHUB_OUTPUT
+            notes="$(gh api repos/${{ github.repository }}/releases/tags/"$tag" --jq '.body' || echo "")"
+            # TestFlight "What to Test" has a 4000 character limit.
+            if [[ ${#notes} -gt 4000 ]]; then
+              notes="${notes:0:3997}..."
+            fi
           fi
+          {
+            echo "notes<<RELEASE_NOTES_EOF"
+            echo "$notes"
+            echo "RELEASE_NOTES_EOF"
+          } >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
 
       - name: Upload app to Test Flight
