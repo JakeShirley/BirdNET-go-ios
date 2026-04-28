@@ -14,7 +14,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "bash scripts/build_testflight_ipa.sh ${nextRelease.version}"
+        "prepareCmd": "bash scripts/build_testflight_ipa.sh ${nextRelease.version} && mkdir -p build/TestFlight && printf '%s' \"${nextRelease.notes}\" > build/TestFlight/release-notes.md"
       }
     ],
     [
