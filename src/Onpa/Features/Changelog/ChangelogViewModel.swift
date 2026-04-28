@@ -70,6 +70,7 @@ final class ChangelogViewModel: ObservableObject {
         func flush() {
             guard let heading = currentHeading else { return }
             let body = currentBody
+                .map(stripPlanTags)
                 .joined(separator: "\n")
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             let parsed = parseHeading(heading)
@@ -95,6 +96,28 @@ final class ChangelogViewModel: ObservableObject {
         flush()
 
         return entries
+    }
+
+    /// Removes project-plan area tags like `[CON-001]`, `[FND-007]`, or
+    /// `[NO-PLAN]` from a changelog body line. These are useful in commit
+    /// history but add noise to user-facing release notes, so we hide them
+    /// before rendering. Only uppercase-letter+digit tags are stripped so
+    /// links like `[1.4.0](...)` and `[hi#confidence](...)` are preserved.
+    static func stripPlanTags(_ line: String) -> String {
+        // Matches `[A-Z]+-(A-Z0-9)+` not followed by `(`, optionally with a
+        // trailing space. The lookahead avoids eating markdown link labels.
+        let pattern = #"\[[A-Z]+-[A-Z0-9]+\](?!\()\s?"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else {
+            return line
+        }
+        let range = NSRange(line.startIndex..., in: line)
+        let stripped = regex.stringByReplacingMatches(in: line, range: range, withTemplate: "")
+        // Collapse any double spaces left behind (e.g. between two tags).
+        return stripped.replacingOccurrences(
+            of: #"  +"#,
+            with: " ",
+            options: .regularExpression
+        )
     }
 
     private static func releaseHeading(from line: String) -> String? {
