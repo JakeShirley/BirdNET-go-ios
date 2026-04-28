@@ -172,6 +172,8 @@ private struct WeatherMetricView: View {
             Image(systemName: systemImage)
                 .foregroundStyle(.secondary)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value)")
     }
 }
 

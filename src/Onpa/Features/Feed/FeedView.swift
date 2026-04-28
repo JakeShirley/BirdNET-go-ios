@@ -92,6 +92,7 @@ private struct DetectionRow: View {
     var detection: BirdDetection
     var isLiveInserted: Bool
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isAnimatingLiveInsertion = false
 
     var body: some View {
@@ -140,7 +141,7 @@ private struct DetectionRow: View {
         .opacity(isAnimatingLiveInsertion ? 0.9 : 1)
         .offset(y: isAnimatingLiveInsertion ? -6 : 0)
         .onAppear {
-            guard isLiveInserted else {
+            guard isLiveInserted, !reduceMotion else {
                 return
             }
 
@@ -152,6 +153,21 @@ private struct DetectionRow: View {
                 }
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityAddTraits(detection.isNewSpecies == true ? .isHeader : [])
+    }
+
+    private var accessibilityLabel: String {
+        var parts: [String] = [
+            detection.commonName,
+            "\(detection.confidencePercent) percent confidence",
+            "at \(detection.timeLabel)"
+        ]
+        if detection.isNewSpecies == true { parts.append("new species") }
+        if detection.locked { parts.append("locked") }
+        if let source = detection.sourceLabel, !source.isEmpty { parts.append(source) }
+        return parts.joined(separator: ", ")
     }
 }
 

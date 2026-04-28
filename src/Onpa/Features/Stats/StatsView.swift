@@ -211,6 +211,7 @@ private struct DateControlCard: View {
                     .background(DS.Surface.inset, in: DS.Shape.card)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Previous day")
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("Daily Activity")
@@ -267,6 +268,7 @@ private struct KPITile: View {
                 .foregroundStyle(DS.accent)
                 .frame(width: 28, height: 28)
                 .background(DS.AccentTint.soft, in: DS.Shape.inset)
+                .accessibilityHidden(true)
 
             Text(value)
                 .font(.title3.weight(.semibold))
@@ -282,6 +284,8 @@ private struct KPITile: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
         .background(DS.Surface.card, in: DS.Shape.card)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value)")
     }
 }
 
@@ -340,10 +344,13 @@ private struct HourlyOverview: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .bottom, spacing: 3) {
                 ForEach(0..<24, id: \.self) { hour in
+                    let count = totals[safe: hour] ?? 0
                     RoundedRectangle(cornerRadius: 2)
-                        .fill(activityColor(count: totals[safe: hour] ?? 0, maximum: maximum))
-                        .frame(height: CGFloat(max(5, min(42, (totals[safe: hour] ?? 0) * 42 / maximum))))
+                        .fill(activityColor(count: count, maximum: maximum))
+                        .frame(height: CGFloat(max(5, min(42, count * 42 / maximum))))
                         .frame(maxWidth: .infinity)
+                        .accessibilityLabel(String(format: "%02d:00", hour))
+                        .accessibilityValue(count == 1 ? "1 detection" : "\(count) detections")
                 }
             }
             .frame(height: 46)
@@ -415,11 +422,14 @@ private struct SpeciesHeatmap: View {
                             ForEach(Array(summary.normalizedHourlyCounts.enumerated()), id: \.offset) { _, count in
                                 HeatmapCell(count: count, maximum: max(maximum, 1))
                                     .frame(width: cellSize, height: cellSize)
+                                    .accessibilityHidden(true)
                             }
                         }
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Open details for \(summary.commonName)")
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(summary.commonName), \(summary.count) detections today")
+                    .accessibilityHint("Opens species details")
                 }
             }
             .padding(.vertical, 4)
@@ -560,6 +570,8 @@ private struct HearingRow: View {
             }
         }
         .padding(.vertical, 2)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(detection.commonName), \(detection.confidencePercent) percent confidence at \(detection.timeLabel)")
     }
 }
 

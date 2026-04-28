@@ -156,7 +156,7 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 | FND-004 | done | Local persistence | Persists active station profile and preferences locally; adds a file-backed cache foundation for future detection/species payloads. |
 | FND-005 | done | Error model | Shared `AppError` maps offline, auth, TLS, rate limit, server, URL, and invalid station responses to user-friendly recovery messages. |
 | FND-006 | done | Logging and diagnostics | Dashboard station management generates a local diagnostics text bundle with station hosts, usernames, tokens, cookies, and passwords redacted. |
-| FND-007 | not-started | Accessibility baseline | Dynamic Type, VoiceOver labels, contrast, reduced motion. |
+| FND-007 | done | Accessibility baseline | Combined-element VoiceOver labels and values across Stats KPIs/heatmap/hourly bars/hearing rows, Feed detection rows, Species rows and detail metrics, Detection detail weather chips, plus reduced-motion gating on the live-feed insertion animation. AGENTS.md captures the ongoing baseline (Dynamic Type, VoiceOver labels, contrast tokens, reduced motion, 44pt hit targets). |
 | FND-008 | not-started | Localization foundation | Prepare app strings for BirdNET-Go's multilingual audience. |
 | FND-009 | done | Liquid Glass-ready design system | DesignSystem token namespace (DS.accent, DS.Surface, DS.Shape, DS.Radius, DS.AccentTint, DS.Overlay) centralizes accent color, system surface tones, and standard radii so views adopt platform colors and SF Symbols by default with minimal custom chrome. |
 | FND-010 | not-started | Availability-gated platform features | Wrap iOS 26-only APIs so the deployment target can be chosen deliberately. |

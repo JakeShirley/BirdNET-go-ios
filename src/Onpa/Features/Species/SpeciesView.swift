@@ -104,6 +104,7 @@ private struct SpeciesRow: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             SpeciesThumbnail(imageURL: imageURL, commonName: entry.species.commonName)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .firstTextBaseline) {
@@ -133,6 +134,17 @@ private struct SpeciesRow: View {
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private var accessibilityLabel: String {
+        var parts: [String] = [entry.species.commonName]
+        if let topConfidenceLabel = entry.topConfidenceLabel {
+            parts.append("top confidence \(topConfidenceLabel)")
+        }
+        parts.append(entry.metadataLabel)
+        return parts.joined(separator: ", ")
     }
 
     private var imageURL: URL? {

@@ -260,6 +260,7 @@ private struct SpeciesMetricTile: View {
             Image(systemName: systemImage)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(DS.accent)
+                .accessibilityHidden(true)
             Text(value)
                 .font(.headline.weight(.semibold))
                 .lineLimit(1)
@@ -272,6 +273,8 @@ private struct SpeciesMetricTile: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
         .background(DS.Surface.card, in: DS.Shape.card)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value)")
     }
 }
 
@@ -304,6 +307,8 @@ private struct SpeciesDetectionRow: View {
             }
         }
         .padding(.vertical, 3)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(detection.timeLabel), \(detection.confidencePercent) percent confidence\(detection.sourceLabel.map { ", \($0)" } ?? "")")
     }
 }
 

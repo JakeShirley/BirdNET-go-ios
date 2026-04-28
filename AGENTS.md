@@ -33,3 +33,38 @@ Mark breaking changes with `!` or a `BREAKING CHANGE:` footer.
 Do not manually choose release versions, create release tags, or hand-edit generated changelog entries during normal feature work. semantic-release owns those outputs.
 
 Do not commit unless the user explicitly asks for a commit. When the user does ask for a commit, keep it focused, include the relevant project plan step tag, and use the Conventional Commit type that matches the release impact.
+
+## Accessibility Baseline (FND-007)
+
+Every new view, control, or modification must meet the following baseline. Treat
+this as a hard requirement, not a polish pass.
+
+- Dynamic Type: prefer `Font.title/headline/subheadline/body/caption*` over
+  `Font.system(size:)`. If a fixed size is unavoidable for layout (heatmap
+  cells, etc.), keep it isolated to a leaf view and document why.
+- VoiceOver labels:
+  - Add `accessibilityLabel` to any `Image`, icon-only `Button`, or chip that
+    isn't already self-describing.
+  - Use `accessibilityElement(children: .combine)` plus a single
+    `accessibilityLabel` for compound rows (commonName + scientific name +
+    confidence + time, KPI tiles, metric chips, hearing rows, etc.) so
+    VoiceOver speaks one coherent phrase per row.
+  - Decorative images (icons inside an already-labeled card) should be marked
+    `.accessibilityHidden(true)`.
+  - For heavy data visualizations (heatmap rows, hourly bars), expose a
+    summarized `accessibilityLabel` and hide the per-cell visuals from
+    VoiceOver with `.accessibilityHidden(true)`. Add `.accessibilityValue` to
+    individual elements only when each cell carries unique information.
+- Contrast: use `Color.primary`, `Color.secondary`, system grouped surfaces, and
+  `DS.accent`/`DS.AccentTint` tokens from `App/DesignSystem.swift` rather than
+  hand-picked colors. Avoid placing text on translucent overlays without a
+  legible material backing.
+- Reduced motion: gate spring animations, parallax, scale, and slide
+  transitions on `@Environment(\.accessibilityReduceMotion)`. Cross-fades and
+  state-only changes are fine.
+- Hit targets: keep tappable controls at least 44x44 points; if a chip looks
+  smaller, wrap it in a `Button` with appropriate padding.
+
+When implementing a new view, include the accessibility hooks in the same
+change rather than as a follow-up.
+

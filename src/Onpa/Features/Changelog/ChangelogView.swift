@@ -296,7 +296,7 @@ private struct CommitBadge: View {
     private var content: some View {
         HStack(spacing: 3) {
             Image(systemName: "chevron.left.forwardslash.chevron.right")
-                .font(.system(size: 9, weight: .semibold))
+                .font(.caption2.weight(.semibold))
             Text(commit.shortHash)
                 .font(.caption2.monospaced())
         }
