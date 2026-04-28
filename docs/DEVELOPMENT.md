@@ -29,7 +29,7 @@ Configure these secrets in the GitHub Actions `AppStore` environment before enab
 - `IOS_DISTRIBUTION_CERTIFICATE_BASE64`: base64-encoded Apple Distribution `.p12` certificate.
 - `IOS_DISTRIBUTION_CERTIFICATE_PASSWORD`: password for the `.p12` certificate.
 
-The App Store Connect app record for `org.odinseye.onpa` must already exist. The App Store provisioning profile for that bundle ID must exist in Apple Developer and must include the Apple Distribution certificate imported by the workflow. Set `IOS_BUILD_NUMBER` in the release workflow environment only if a manual build-number override is needed.
+The App Store Connect app record for `org.odinseye.onpa` must already exist. An active App Store provisioning profile for that bundle ID must also exist in Apple Developer; `apple-actions/download-provisioning-profiles` downloads an existing active profile and does not create one. The profile must include the Apple Distribution certificate imported by the workflow. Set `IOS_BUILD_NUMBER` in the release workflow environment only if a manual build-number override is needed.
 
 To create the signing assets:
 
@@ -53,7 +53,9 @@ To create the signing assets:
 	- Add a new profile using the `App Store` distribution type.
 	- Select the app ID for `org.odinseye.onpa`.
 	- Select the Apple Distribution certificate from the previous step.
-	- Save the profile. The release workflow downloads it automatically with `apple-actions/download-provisioning-profiles`.
+	- Name and generate the profile. It must show as active in Apple Developer.
+	- If you rotate or replace the Apple Distribution certificate later, edit or regenerate this profile so it includes the new certificate.
+	- The release workflow downloads the active profile automatically with `apple-actions/download-provisioning-profiles`.
 
 4. Add the credentials as GitHub Actions secrets in the `AppStore` environment. This command keeps the `.p12` binary base64-encoded and avoids writing secret values into shell history:
 
