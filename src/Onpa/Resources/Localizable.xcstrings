@@ -758,6 +758,64 @@
         }
       }
     },
+    "Average Accuracy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durchschnittliche Genauigkeit"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Average Accuracy"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Precisión media"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均精度"
+          }
+        }
+      }
+    },
+    "average confidence %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "durchschnittliche Konfidenz %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "average confidence %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "confianza media %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "平均信頼度 %@"
+          }
+        }
+      }
+    },
     "Base URL" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -786,6 +844,9 @@
           }
         }
       }
+    },
+    "BirdNET-Go" : {
+
     },
     "Cancel" : {
       "extractionState" : "manual",
@@ -1163,6 +1224,9 @@
           }
         }
       }
+    },
+    "Connect a station to start tracking detections." : {
+
     },
     "Connect or Switch Station" : {
       "extractionState" : "manual",
@@ -2092,6 +2156,35 @@
         }
       }
     },
+    "Least Seen" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Am seltensten gesehen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Least Seen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menos vistas"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "観測回数が少ない順"
+          }
+        }
+      }
+    },
     "Less" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2755,6 +2848,64 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "朝"
+          }
+        }
+      }
+    },
+    "Most Recent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt gesehen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Most Recent"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más recientes"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近観測した順"
+          }
+        }
+      }
+    },
+    "Most Seen" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Am häufigsten gesehen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Most Seen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más vistas"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "観測回数が多い順"
           }
         }
       }
@@ -3455,6 +3606,12 @@
         }
       }
     },
+    "Onpa widget: %@" : {
+
+    },
+    "Open Onpa" : {
+
+    },
     "Open the Dashboard station menu and log in with your BirdNET-Go password." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3890,6 +4047,19 @@
         }
       }
     },
+    "Recent Detection" : {
+
+    },
+    "Recent detection from %@: %@, %@, %lld percent confidence, %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Recent detection from %1$@: %2$@, %3$@, %4$lld percent confidence, %5$@."
+          }
+        }
+      }
+    },
     "Recent Detections" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4093,35 +4263,6 @@
         }
       }
     },
-    "Reliability" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verlässlichkeit"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reliability"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fiabilidad"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "信頼度"
-          }
-        }
-      }
-    },
     "Release notes will appear here once the first version of Onpa ships." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4147,6 +4288,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Onpa の最初のバージョンがリリースされると、リリースノートがここに表示されます。"
+          }
+        }
+      }
+    },
+    "Reliability" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlässlichkeit"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reliability"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiabilidad"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "信頼度"
           }
         }
       }
@@ -4701,6 +4871,67 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最近の検出サマリーなしでステーションの種カタログを表示しています: %@"
+          }
+        }
+      }
+    },
+    "Shows the latest bird detected by your BirdNET-Go station." : {
+
+    },
+    "Sort By" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sortieren nach"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort By"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordenar por"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "並び替え"
+          }
+        }
+      }
+    },
+    "Sort species" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arten sortieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort species"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordenar especies"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "種を並び替え"
           }
         }
       }
@@ -5662,35 +5893,6 @@
         }
       }
     },
-    "average confidence %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "durchschnittliche Konfidenz %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "average confidence %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "confianza media %@"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "平均信頼度 %@"
-          }
-        }
-      }
-    },
     "Try again from the Feed tab." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6126,179 +6328,8 @@
         }
       }
     },
-    "Average Accuracy" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Durchschnittliche Genauigkeit"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Average Accuracy"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Precisión media"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "平均精度"
-          }
-        }
-      }
-    },
-    "Least Seen" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Am seltensten gesehen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Least Seen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Menos vistas"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "観測回数が少ない順"
-          }
-        }
-      }
-    },
-    "Most Seen" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Am häufigsten gesehen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Most Seen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Más vistas"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "観測回数が多い順"
-          }
-        }
-      }
-    },
-    "Most Recent" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zuletzt gesehen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Most Recent"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Más recientes"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近観測した順"
-          }
-        }
-      }
-    },
-    "Sort By" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sortieren nach"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sort By"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ordenar por"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "並び替え"
-          }
-        }
-      }
-    },
-    "Sort species" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arten sortieren"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sort species"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ordenar especies"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "種を並び替え"
-          }
-        }
-      }
+    "Your station hasn't reported anything yet." : {
+
     }
   },
   "version" : "1.0"

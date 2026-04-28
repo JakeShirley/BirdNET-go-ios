@@ -291,7 +291,7 @@ Status values: `not-started`, `in-progress`, `done`, `blocked`, `deferred`.
 | ID | Status | Feature | Notes |
 | --- | --- | --- | --- |
 | PLT-001 | not-started | iPad layout | Sidebar and multi-column detection detail. |
-| PLT-002 | not-started | Widgets | Recent detection, species of day, station status, favorite species. Start with one size and plan expansion. |
+| PLT-002 | in-progress | Widgets | Recent detection widget (systemSmall) shipped via OnpaWidget extension backed by App Group `group.org.odinseye.onpa`. Species of day, station status, and favorite species widgets, plus medium/large sizes, still pending. |
 | PLT-003 | not-started | Live Activity | Active station listening status or live species ticker, likely APNs-backed for reliable background updates. |
 | PLT-004 | not-started | watchOS companion | Favorite species alerts and quick recent detections. |
 | PLT-005 | not-started | Shortcuts integration | App Intents for latest detection, station status, favorite species, and live audio. |

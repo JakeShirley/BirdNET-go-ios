@@ -52,7 +52,43 @@
 		8A3F40BF2BD9000C00A11001 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40BE2BD9000C00A11001 /* SettingsViewModel.swift */; };
 		8A3F40D12BD9000E00A11001 /* ChangelogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40D02BD9000E00A11001 /* ChangelogView.swift */; };
 		8A3F40D32BD9000E00A11001 /* ChangelogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F40D22BD9000E00A11001 /* ChangelogViewModel.swift */; };
+		8A3F50000001AA0001000001 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F50000001AA0001000002 /* AppGroup.swift */; };
+		8A3F50000001AA0001000003 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F50000001AA0001000002 /* AppGroup.swift */; };
+		8A3F50000001AA0001000004 /* StationProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F407A2BD9000100A11001 /* StationProfile.swift */; };
+		8A3F50000001AA0001000005 /* BirdDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F409D2BD9000400A11001 /* BirdDetection.swift */; };
+		8A3F50000001AA0001000006 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F41001100A11001 /* DesignSystem.swift */; };
+		8A3F50000001AA0001000007 /* OnpaWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F50000001AA0001000008 /* OnpaWidgetBundle.swift */; };
+		8A3F50000001AA0001000009 /* RecentDetectionWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F50000001AA0001000010 /* RecentDetectionWidget.swift */; };
+		8A3F50000001AA0001000011 /* RecentDetectionLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F50000001AA0001000012 /* RecentDetectionLoader.swift */; };
+		8A3F50000001AA0001000013 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F41031100A11001 /* Localizable.xcstrings */; };
+		8A3F50000001AA0001000014 /* OnpaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8A3F50000001AA0001000015 /* OnpaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8A3F50000001AA0001000016 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A3F50000001AA0001000017 /* SwiftUI.framework */; };
+		8A3F50000001AA0001000018 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A3F50000001AA0001000019 /* WidgetKit.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8A3F50000001AA0001000020 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A3F3F452BD8000100A11001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8A3F50000001AA0001000021;
+			remoteInfo = OnpaWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8A3F50000001AA0001000022 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8A3F50000001AA0001000014 /* OnpaWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		8A3F3F4D2BD8000100A11001 /* Onpa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Onpa.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +138,16 @@
 		8A3F40BE2BD9000C00A11001 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		8A3F40D02BD9000E00A11001 /* ChangelogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangelogView.swift; sourceTree = "<group>"; };
 		8A3F40D22BD9000E00A11001 /* ChangelogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangelogViewModel.swift; sourceTree = "<group>"; };
+		8A3F50000001AA0001000002 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
+		8A3F50000001AA0001000023 /* Onpa.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Onpa.entitlements; sourceTree = "<group>"; };
+		8A3F50000001AA0001000008 /* OnpaWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnpaWidgetBundle.swift; sourceTree = "<group>"; };
+		8A3F50000001AA0001000010 /* RecentDetectionWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentDetectionWidget.swift; sourceTree = "<group>"; };
+		8A3F50000001AA0001000012 /* RecentDetectionLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentDetectionLoader.swift; sourceTree = "<group>"; };
+		8A3F50000001AA0001000024 /* OnpaWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OnpaWidget.entitlements; sourceTree = "<group>"; };
+		8A3F50000001AA0001000025 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A3F50000001AA0001000015 /* OnpaWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OnpaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A3F50000001AA0001000017 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		8A3F50000001AA0001000019 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +158,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A3F50000001AA0001000026 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A3F50000001AA0001000016 /* SwiftUI.framework in Frameworks */,
+				8A3F50000001AA0001000018 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -119,6 +174,8 @@
 			isa = PBXGroup;
 			children = (
 				8A3F3F4E2BD8000100A11001 /* Onpa */,
+				8A3F50000001AA0001000027 /* OnpaWidget */,
+				8A3F50000001AA0001000028 /* Frameworks */,
 				8A3F3F4C2BD8000100A11001 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -127,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				8A3F3F4D2BD8000100A11001 /* Onpa.app */,
+				8A3F50000001AA0001000015 /* OnpaWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,6 +192,7 @@
 		8A3F3F4E2BD8000100A11001 /* Onpa */ = {
 			isa = PBXGroup;
 			children = (
+				8A3F50000001AA0001000023 /* Onpa.entitlements */,
 				8A3F3F532BD8000100A11001 /* App */,
 				8A3F40872BD9000100A11001 /* Domain */,
 				8A3F40892BD9000100A11001 /* Networking */,
@@ -152,6 +211,7 @@
 				8A3F3F5B2BD8000100A11001 /* AppTab.swift */,
 				8A3F3F5C2BD8000100A11001 /* RootTabView.swift */,
 				8A3F40792BD9000100A11001 /* AppEnvironment.swift */,
+				8A3F50000001AA0001000002 /* AppGroup.swift */,
 				8A3F40932BD9000300A11001 /* AppConfiguration.swift */,
 			);
 			path = App;
@@ -296,6 +356,35 @@
 			path = DetectionDetail;
 			sourceTree = "<group>";
 		};
+		8A3F50000001AA0001000027 /* OnpaWidget */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F50000001AA0001000024 /* OnpaWidget.entitlements */,
+				8A3F50000001AA0001000008 /* OnpaWidgetBundle.swift */,
+				8A3F50000001AA0001000010 /* RecentDetectionWidget.swift */,
+				8A3F50000001AA0001000012 /* RecentDetectionLoader.swift */,
+				8A3F50000001AA0001000029 /* Resources */,
+			);
+			path = OnpaWidget;
+			sourceTree = "<group>";
+		};
+		8A3F50000001AA0001000029 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F50000001AA0001000025 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8A3F50000001AA0001000028 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F50000001AA0001000017 /* SwiftUI.framework */,
+				8A3F50000001AA0001000019 /* WidgetKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -306,15 +395,34 @@
 				8A3F3F492BD8000100A11001 /* Sources */,
 				8A3F3F4A2BD8000100A11001 /* Frameworks */,
 				8A3F3F712BD8000100A11001 /* Resources */,
+				8A3F50000001AA0001000022 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8A3F50000001AA0001000030 /* PBXTargetDependency */,
 			);
 			name = Onpa;
 			productName = Onpa;
 			productReference = 8A3F3F4D2BD8000100A11001 /* Onpa.app */;
 			productType = "com.apple.product-type.application";
+		};
+		8A3F50000001AA0001000021 /* OnpaWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A3F50000001AA0001000031 /* Build configuration list for PBXNativeTarget "OnpaWidget" */;
+			buildPhases = (
+				8A3F50000001AA0001000032 /* Sources */,
+				8A3F50000001AA0001000026 /* Frameworks */,
+				8A3F50000001AA0001000033 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OnpaWidget;
+			productName = OnpaWidget;
+			productReference = 8A3F50000001AA0001000015 /* OnpaWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -327,6 +435,9 @@
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					8A3F3F4B2BD8000100A11001 = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
+					8A3F50000001AA0001000021 = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
 				};
@@ -348,6 +459,7 @@
 			projectRoot = "";
 			targets = (
 				8A3F3F4B2BD8000100A11001 /* Onpa */,
+				8A3F50000001AA0001000021 /* OnpaWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -363,6 +475,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A3F50000001AA0001000033 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A3F50000001AA0001000013 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -375,6 +495,7 @@
 				8A3F3F602BD8000100A11001 /* AppTab.swift in Sources */,
 				8A3F3F612BD8000100A11001 /* RootTabView.swift in Sources */,
 				8A3F40802BD9000100A11001 /* AppEnvironment.swift in Sources */,
+				8A3F50000001AA0001000001 /* AppGroup.swift in Sources */,
 				8A3F40942BD9000300A11001 /* AppConfiguration.swift in Sources */,
 				8A3F40812BD9000100A11001 /* StationProfile.swift in Sources */,
 				8A3F40822BD9000100A11001 /* StationConnectionStatus.swift in Sources */,
@@ -415,7 +536,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A3F50000001AA0001000032 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A3F50000001AA0001000007 /* OnpaWidgetBundle.swift in Sources */,
+				8A3F50000001AA0001000009 /* RecentDetectionWidget.swift in Sources */,
+				8A3F50000001AA0001000011 /* RecentDetectionLoader.swift in Sources */,
+				8A3F50000001AA0001000003 /* AppGroup.swift in Sources */,
+				8A3F50000001AA0001000004 /* StationProfile.swift in Sources */,
+				8A3F50000001AA0001000005 /* BirdDetection.swift in Sources */,
+				8A3F50000001AA0001000006 /* DesignSystem.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8A3F50000001AA0001000030 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8A3F50000001AA0001000021 /* OnpaWidget */;
+			targetProxy = 8A3F50000001AA0001000020 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		8A3F3F722BD8000100A11001 /* Debug */ = {
@@ -540,6 +683,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Onpa/Onpa.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -569,6 +713,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Onpa/Onpa.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -584,6 +729,71 @@
 				MARKETING_VERSION = "0.0.0-development";
 				PRODUCT_BUNDLE_IDENTIFIER = org.odinseye.onpa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8A3F50000001AA0001000034 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OnpaWidget/OnpaWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NV688MDJ78;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OnpaWidget/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Onpa;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "0.0.0-development";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.odinseye.onpa.OnpaWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8A3F50000001AA0001000035 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OnpaWidget/OnpaWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NV688MDJ78;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OnpaWidget/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Onpa;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "0.0.0-development";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.odinseye.onpa.OnpaWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -611,6 +821,15 @@
 			buildConfigurations = (
 				8A3F3F762BD8000100A11001 /* Debug */,
 				8A3F3F772BD8000100A11001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A3F50000001AA0001000031 /* Build configuration list for PBXNativeTarget "OnpaWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A3F50000001AA0001000034 /* Debug */,
+				8A3F50000001AA0001000035 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

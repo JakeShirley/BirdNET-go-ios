@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import SwiftUI
+import WidgetKit
 
 @MainActor
 final class FeedViewModel: ObservableObject {
@@ -140,6 +141,7 @@ final class FeedViewModel: ObservableObject {
     private func cache(_ detections: [BirdDetection], for profile: StationProfile, environment: AppEnvironment) async throws {
         let data = try encoder.encode(detections)
         try await environment.localCacheStore.saveData(data, for: cacheKey(for: profile))
+        WidgetCenter.shared.reloadAllTimelines()
     }
 
     private func cacheIgnoringErrors(_ detections: [BirdDetection], for profile: StationProfile, environment: AppEnvironment) async {
