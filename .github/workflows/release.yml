@@ -67,6 +67,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run release
 
+      - name: Get release notes
+        run: |
+          tag="$(git describe --tags --abbrev=0 2>/dev/null || echo "")"
+          if [[ -n "$tag" ]]; then
+            release_notes="$(gh api repos/${{ github.repository }}/releases/tags/"$tag" --jq '.body' || echo "")"
+            echo "notes<<EOF" >> $GITHUB_OUTPUT
+            echo "$release_notes" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "notes=" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
       - name: Upload app to TestFlight
         if: ${{ hashFiles('build/TestFlight/export/Onpa.ipa') != '' }}
         uses: apple-actions/upload-testflight-build@v5
@@ -77,3 +90,4 @@ jobs:
           api-private-key: ${{ secrets.APP_STORE_CONNECT_API_PRIVATE_KEY }}
           uses-non-exempt-encryption: "false"
           wait-for-processing: "true"
+          release-notes: ${{ steps.release-notes.outputs.notes }}
