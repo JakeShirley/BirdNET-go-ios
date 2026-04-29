@@ -59,6 +59,7 @@ final class FeedViewModel: ObservableObject {
 
             stationProfile = profile
             let recentDetections = try await environment.apiClient.recentDetections(station: profile, limit: detectionLimit)
+            NotificationCenter.default.post(name: .activeStationDidRespond, object: profile)
             applyRecentDetections(recentDetections)
             if recentDetections.isEmpty {
                 statusMessage = String(localized: "No recent detections.")
@@ -99,9 +100,11 @@ final class FeedViewModel: ObservableObject {
                     case .connected:
                         reconnectDelay = .seconds(1)
                         streamStatus = .connected
+                        NotificationCenter.default.post(name: .activeStationDidRespond, object: profile)
                     case .detection(let detection):
                         reconnectDelay = .seconds(1)
                         streamStatus = .connected
+                        NotificationCenter.default.post(name: .activeStationDidRespond, object: profile)
                         insertLiveDetection(detection)
                         try await cache(detections, for: profile, environment: environment)
                     case .heartbeat:

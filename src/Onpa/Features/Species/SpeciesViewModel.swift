@@ -88,6 +88,7 @@ final class SpeciesViewModel: ObservableObject {
             }
 
             species = makeEntries(summaries: summaries, catalog: catalog, recent: recent)
+            NotificationCenter.default.post(name: .activeStationDidRespond, object: profile)
 
             if let summaryError, summaries.isEmpty {
                 setMessage(String(localized: "Showing partial species list without overall stats: \(summaryError.userFacingMessage)"), kind: .warning)

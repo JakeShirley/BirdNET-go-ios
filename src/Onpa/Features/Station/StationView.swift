@@ -8,20 +8,43 @@ struct StationView: View {
     @State private var profilePendingRename: StationProfile?
     @State private var renameText = ""
     @State private var isAddingNewStation = false
+    @State private var didApplyInitialMode = false
+
+    /// Optional preset that lets callers (e.g. a "+ Add Station" menu entry
+    /// on the Dashboard) push this view straight into the add-station form
+    /// instead of the manage view.
+    let initialMode: Mode
+
+    init(initialMode: Mode = .manage) {
+        self.initialMode = initialMode
+    }
+
+    enum Mode {
+        case manage
+        case addStation
+    }
 
     var body: some View {
         Form {
-            stationsSection
+            if isAddingNewStation {
+                addStationSection
+            } else {
+                stationsSection
 
-            connectionSection
+                connectionSection
 
-            accountSection
+                if viewModel.activeProfile == nil {
+                    addStationSection
+                }
 
-            if viewModel.canDeleteActiveProfile {
-                deleteActiveSection
+                accountSection
+
+                if viewModel.canDeleteActiveProfile {
+                    deleteActiveSection
+                }
+
+                diagnosticsSection
             }
-
-            diagnosticsSection
 
             if let statusMessage = viewModel.statusMessage {
                 Section("Status") {
@@ -29,21 +52,31 @@ struct StationView: View {
                 }
             }
         }
-        .navigationTitle("Station Management")
+        .navigationTitle(navigationTitle)
         .toolbar(.hidden, for: .tabBar)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isAddingNewStation = true
-                    viewModel.prepareForNewStation()
-                } label: {
-                    Label("Add Station", systemImage: "plus")
+            if isAddingNewStation && viewModel.activeProfile != nil {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        isAddingNewStation = false
+                        Task {
+                            await viewModel.restoreActiveProfileForm(environment: appEnvironment)
+                        }
+                    }
+                    .accessibilityLabel("Cancel adding station")
                 }
-                .accessibilityLabel("Add station")
             }
         }
         .task {
             await viewModel.load(environment: appEnvironment)
+
+            if !didApplyInitialMode {
+                didApplyInitialMode = true
+                if initialMode == .addStation {
+                    isAddingNewStation = true
+                    viewModel.prepareForNewStation()
+                }
+            }
 
             if appEnvironment.configuration.debugShowsDeleteStationConfirmation, viewModel.canDeleteActiveProfile {
                 profilePendingDeletion = viewModel.activeProfile
@@ -51,7 +84,11 @@ struct StationView: View {
             }
         }
         .refreshable {
-            await viewModel.refreshAuthStatus(environment: appEnvironment)
+            if viewModel.activeProfile != nil {
+                await viewModel.revalidateActiveProfile(environment: appEnvironment)
+            } else {
+                await viewModel.refreshAuthStatus(environment: appEnvironment)
+            }
         }
         .alert(
             "Delete Station?",
@@ -148,8 +185,114 @@ struct StationView: View {
         .accessibilityHint(isActive ? "" : "Switches to this station")
     }
 
+    @ViewBuilder
     private var connectionSection: some View {
-        Section(connectionSectionTitle) {
+        if let active = viewModel.activeProfile {
+            Section("Connection") {
+                liveStatusRow
+
+                LabeledContent("Station", value: active.name)
+                LabeledContent("URL", value: active.baseURL.absoluteString)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+
+                if let report = viewModel.connectionReport {
+                    LabeledContent("Identity", value: report.identity)
+                    LabeledContent("TLS", value: report.tlsState.displayName)
+                    LabeledContent(
+                        "Security",
+                        value: report.appConfig.security.enabled
+                            ? String(localized: "Enabled")
+                            : String(localized: "Disabled")
+                    )
+                }
+
+                Button {
+                    Task {
+                        await viewModel.revalidateActiveProfile(environment: appEnvironment)
+                    }
+                } label: {
+                    HStack(spacing: 10) {
+                        if viewModel.isValidating {
+                            ProgressView()
+                        } else {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                        }
+                        Text("Refresh Connection")
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .center)
+                    .contentShape(Rectangle())
+                }
+                .disabled(viewModel.isBusy || viewModel.isValidating)
+            }
+        }
+    }
+
+    private var liveStatusRow: some View {
+        let status = viewModel.liveStatus
+        return HStack(spacing: 10) {
+            Image(systemName: status.systemImage)
+                .foregroundStyle(statusColor(for: status))
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(status.displayName)
+                    .font(.headline)
+                if let subtitle = liveStatusSubtitle(for: status) {
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            Spacer(minLength: 8)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(liveStatusAccessibilityLabel(for: status))
+    }
+
+    private func statusColor(for status: StationViewModel.LiveStatus) -> Color {
+        switch status {
+        case .connected, .reachable:
+            return .green
+        case .checking:
+            return .secondary
+        case .unknown:
+            return .orange
+        case .noStation:
+            return .secondary
+        }
+    }
+
+    private func liveStatusSubtitle(for status: StationViewModel.LiveStatus) -> String? {
+        switch status {
+        case .connected:
+            return String(localized: "Validated this session")
+        case .reachable(let date):
+            let relative = Self.relativeFormatter.localizedString(for: date, relativeTo: Date())
+            return String(localized: "Last response \(relative)")
+        case .checking:
+            return String(localized: "Validating connection…")
+        case .unknown:
+            return String(localized: "No recent response yet — pull to refresh.")
+        case .noStation:
+            return nil
+        }
+    }
+
+    private func liveStatusAccessibilityLabel(for status: StationViewModel.LiveStatus) -> String {
+        if let subtitle = liveStatusSubtitle(for: status) {
+            return "\(status.displayName). \(subtitle)"
+        }
+        return status.displayName
+    }
+
+    private static let relativeFormatter: RelativeDateTimeFormatter = {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .short
+        return formatter
+    }()
+
+    private var addStationSection: some View {
+        Section(viewModel.activeProfile == nil ? "Connect Your Station" : "Add Station") {
             TextField("Base URL", text: $viewModel.baseURLText)
                 .keyboardType(.URL)
                 .textContentType(.URL)
@@ -158,84 +301,84 @@ struct StationView: View {
 
             Button {
                 Task {
-                    await viewModel.connect(environment: appEnvironment)
-                    isAddingNewStation = false
+                    let didConnect = await viewModel.connect(environment: appEnvironment)
+                    if didConnect {
+                        isAddingNewStation = false
+                    }
                 }
             } label: {
                 HStack(spacing: 10) {
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                    Text(connectButtonTitle)
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                        .hidden()
+                    Image(systemName: "link")
+                    Text("Connect Station")
                 }
                 .frame(maxWidth: .infinity, minHeight: 44, alignment: .center)
                 .contentShape(Rectangle())
             }
             .disabled(viewModel.isBusy)
+        }
+    }
 
-            if let report = viewModel.connectionReport {
-                LabeledContent("Station", value: report.profile.name)
-                LabeledContent("Status", value: report.status.displayName)
-                LabeledContent("Identity", value: report.identity)
-                LabeledContent("TLS", value: report.tlsState.displayName)
-                LabeledContent("Security", value: report.appConfig.security.enabled ? String(localized: "Enabled") : String(localized: "Disabled"))
-            } else if let active = viewModel.activeProfile {
-                LabeledContent("Station", value: active.name)
-                LabeledContent("Status", value: String(localized: "Not validated yet"))
-            } else {
-                LabeledContent("Station", value: String(localized: "Not connected"))
-                LabeledContent("Status", value: String(localized: "Offline"))
+    @ViewBuilder
+    private var accountSection: some View {
+        if viewModel.activeProfile != nil {
+            Section("Account") {
+                accountFields
+
+                if let authStatus = viewModel.authStatus {
+                    LabeledContent("Authenticated", value: authStatus.authenticated ? String(localized: "Yes") : String(localized: "No"))
+                    if let username = authStatus.username, !username.isEmpty {
+                        LabeledContent("User", value: username)
+                    }
+                    if let method = authStatus.method, !method.isEmpty {
+                        LabeledContent("Method", value: method)
+                    }
+                }
             }
         }
     }
 
-    private var accountSection: some View {
-        Section("Account") {
-            if viewModel.connectionReport == nil {
-                Text("Connect a station to enable account actions.")
-                    .foregroundStyle(.secondary)
-            } else if !viewModel.canLogIn {
-                Text("This station does not advertise direct password login.")
-                    .foregroundStyle(.secondary)
-            } else {
-                TextField("Username (optional)", text: $viewModel.username)
-                    .textContentType(.username)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
+    @ViewBuilder
+    private var accountFields: some View {
+        // We always render the credential fields when an active profile
+        // exists so users can see and edit saved Keychain values without
+        // having to tap Connect. The Log In button is only enabled once
+        // we've confirmed the station advertises basic auth.
+        TextField("Username (optional)", text: $viewModel.username)
+            .textContentType(.username)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
 
-                SecureField("Password", text: $viewModel.password)
-                    .textContentType(.password)
+        SecureField("Password", text: $viewModel.password)
+            .textContentType(.password)
 
-                Toggle("Save in Keychain", isOn: $viewModel.rememberCredentials)
-                    .onChange(of: viewModel.rememberCredentials) {
-                        Task { await viewModel.savePreferences(environment: appEnvironment) }
-                    }
-
-                Button {
-                    Task { await viewModel.logIn(environment: appEnvironment) }
-                } label: {
-                    Label("Log In", systemImage: "person.badge.key")
-                }
-                .disabled(viewModel.isBusy)
-
-                Button(role: .destructive) {
-                    Task { await viewModel.logOut(environment: appEnvironment) }
-                } label: {
-                    Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
-                }
-                .disabled(viewModel.isBusy || !viewModel.canLogOut)
+        Toggle("Save in Keychain", isOn: $viewModel.rememberCredentials)
+            .onChange(of: viewModel.rememberCredentials) {
+                Task { await viewModel.savePreferences(environment: appEnvironment) }
             }
 
-            if let authStatus = viewModel.authStatus {
-                LabeledContent("Authenticated", value: authStatus.authenticated ? String(localized: "Yes") : String(localized: "No"))
-                if let username = authStatus.username, !username.isEmpty {
-                    LabeledContent("User", value: username)
-                }
-                if let method = authStatus.method, !method.isEmpty {
-                    LabeledContent("Method", value: method)
-                }
-            }
+        if viewModel.connectionReport == nil {
+            Text("Refresh the connection to enable login.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        } else if !viewModel.canLogIn {
+            Text("This station does not advertise direct password login.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
+
+        Button {
+            Task { await viewModel.logIn(environment: appEnvironment) }
+        } label: {
+            Label("Log In", systemImage: "person.badge.key")
+        }
+        .disabled(viewModel.isBusy || !viewModel.canLogIn)
+
+        Button(role: .destructive) {
+            Task { await viewModel.logOut(environment: appEnvironment) }
+        } label: {
+            Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
+        }
+        .disabled(viewModel.isBusy || !viewModel.canLogOut)
     }
 
     private var deleteActiveSection: some View {
@@ -276,12 +419,11 @@ struct StationView: View {
 
     // MARK: - Helpers
 
-    private var connectionSectionTitle: LocalizedStringKey {
-        isAddingNewStation || viewModel.activeProfile == nil ? "New Station" : "Connection"
-    }
-
-    private var connectButtonTitle: LocalizedStringKey {
-        isAddingNewStation || viewModel.activeProfile == nil ? "Connect Station" : "Connect or Switch Station"
+    private var navigationTitle: LocalizedStringKey {
+        if isAddingNewStation {
+            return "Add Station"
+        }
+        return "Station Management"
     }
 
     private var renameAlertBinding: Binding<Bool> {

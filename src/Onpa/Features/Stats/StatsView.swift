@@ -5,6 +5,7 @@ struct StatsView: View {
     @StateObject private var viewModel = StatsViewModel()
     @State private var debugSpeciesSummary: DailySpeciesSummary?
     @State private var isStationManagementPresented = false
+    @State private var stationManagementInitialMode: StationView.Mode = .manage
     @State private var isSettingsPresented = false
     @State private var didOpenDebugStationManagement = false
     @State private var didOpenDebugSettings = false
@@ -23,9 +24,17 @@ struct StatsView: View {
             ToolbarItem(placement: .topBarLeading) {
                 Menu {
                     Button {
+                        stationManagementInitialMode = .manage
                         isStationManagementPresented = true
                     } label: {
-                        Label(stationMenuActionTitle, systemImage: "arrow.triangle.2.circlepath")
+                        Label(stationMenuActionTitle, systemImage: "antenna.radiowaves.left.and.right")
+                    }
+
+                    Button {
+                        stationManagementInitialMode = .addStation
+                        isStationManagementPresented = true
+                    } label: {
+                        Label("Add Station", systemImage: "plus")
                     }
 
                     Button {
@@ -76,6 +85,10 @@ struct StatsView: View {
                 return
             }
 
+            // Reset to the default mode when the screen dismisses so the
+            // next "Manage Station" tap doesn't accidentally land in
+            // add-station mode.
+            stationManagementInitialMode = .manage
             Task { await viewModel.refresh(environment: appEnvironment) }
         }
         .onReceive(NotificationCenter.default.publisher(for: .activeStationProfileDidChange)) { _ in
@@ -87,7 +100,7 @@ struct StatsView: View {
             }
         }
         .navigationDestination(isPresented: $isStationManagementPresented) {
-            StationView()
+            StationView(initialMode: stationManagementInitialMode)
         }
         .navigationDestination(isPresented: $isSettingsPresented) {
             SettingsView()
@@ -95,7 +108,7 @@ struct StatsView: View {
     }
 
     private var stationMenuActionTitle: String {
-        viewModel.hasStation ? "Manage or Switch Station" : "Connect to Station"
+        viewModel.hasStation ? "Manage Station" : "Connect to Station"
     }
 
     private func openDebugDestinationIfNeeded() {

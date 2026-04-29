@@ -149,6 +149,7 @@ final class StatsViewModel: ObservableObject {
 
             dailySummary = analyticsSummary
             recentDetections = recent
+            NotificationCenter.default.post(name: .activeStationDidRespond, object: profile)
 
             if analyticsError != nil, !analyticsSummary.isEmpty {
                 setMessage(String(localized: "Showing activity from recent detections."), kind: .warning)
