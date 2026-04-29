@@ -38,17 +38,30 @@ struct AppPreferences: Codable, Equatable, Sendable {
     var rememberStationCredentials: Bool
     var autoFetchSpectrograms: Bool
     var appearance: AppearancePreference
+    /// When true, the app may use Apple's on-device Foundation Models to
+    /// rewrite deterministic summaries (e.g. the dashboard Daily Digest)
+    /// in plain language. Generation only runs on devices that support
+    /// Apple Intelligence; the deterministic template is always the
+    /// fallback. Defaults off until the feature has been dogfooded.
+    var enableIntelligenceSummaries: Bool
 
     static let defaults = AppPreferences(
         rememberStationCredentials: true,
         autoFetchSpectrograms: true,
-        appearance: .system
+        appearance: .system,
+        enableIntelligenceSummaries: false
     )
 
-    init(rememberStationCredentials: Bool, autoFetchSpectrograms: Bool, appearance: AppearancePreference = .system) {
+    init(
+        rememberStationCredentials: Bool,
+        autoFetchSpectrograms: Bool,
+        appearance: AppearancePreference = .system,
+        enableIntelligenceSummaries: Bool = false
+    ) {
         self.rememberStationCredentials = rememberStationCredentials
         self.autoFetchSpectrograms = autoFetchSpectrograms
         self.appearance = appearance
+        self.enableIntelligenceSummaries = enableIntelligenceSummaries
     }
 
     init(from decoder: Decoder) throws {
@@ -56,6 +69,7 @@ struct AppPreferences: Codable, Equatable, Sendable {
         rememberStationCredentials = try container.decodeIfPresent(Bool.self, forKey: .rememberStationCredentials) ?? Self.defaults.rememberStationCredentials
         autoFetchSpectrograms = try container.decodeIfPresent(Bool.self, forKey: .autoFetchSpectrograms) ?? Self.defaults.autoFetchSpectrograms
         appearance = try container.decodeIfPresent(AppearancePreference.self, forKey: .appearance) ?? Self.defaults.appearance
+        enableIntelligenceSummaries = try container.decodeIfPresent(Bool.self, forKey: .enableIntelligenceSummaries) ?? Self.defaults.enableIntelligenceSummaries
     }
 }
 

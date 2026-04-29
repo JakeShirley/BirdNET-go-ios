@@ -91,6 +91,13 @@ struct StatsView: View {
             stationManagementInitialMode = .manage
             Task { await viewModel.refresh(environment: appEnvironment) }
         }
+        .onChange(of: isSettingsPresented) { _, isPresented in
+            // Pick up any preference changes (e.g. the Intelligence toggle)
+            // as soon as Settings dismisses, without requiring a manual
+            // pull-to-refresh.
+            guard !isPresented else { return }
+            Task { await viewModel.reloadIntelligencePreference(environment: appEnvironment) }
+        }
         .onReceive(NotificationCenter.default.publisher(for: .activeStationProfileDidChange)) { _ in
             Task { await viewModel.refresh(environment: appEnvironment) }
         }
@@ -155,6 +162,15 @@ struct StatsView: View {
             LazyVStack(spacing: 16) {
                 if let statusMessage = viewModel.statusMessage {
                     StatusBanner(message: statusMessage, kind: viewModel.statusKind)
+                }
+
+                if let digest = viewModel.dailyDigest {
+                    DailyDigestCard(
+                        stats: digest,
+                        dateTitle: viewModel.selectedDateTitle,
+                        intelligenceEnabled: viewModel.intelligenceEnabled,
+                        intelligenceService: appEnvironment.intelligenceService
+                    )
                 }
 
                 DateControlCard(viewModel: viewModel, environment: appEnvironment)

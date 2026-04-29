@@ -37,6 +37,17 @@ struct SettingsView: View {
                     }
             }
 
+            Section {
+                Toggle("Generate Daily Summaries", isOn: $viewModel.enableIntelligenceSummaries)
+                    .onChange(of: viewModel.enableIntelligenceSummaries) {
+                        Task { await viewModel.save(environment: appEnvironment) }
+                    }
+            } header: {
+                Text("Intelligence")
+            } footer: {
+                Text("Uses Apple Intelligence on supported devices to rewrite the dashboard's daily digest in plain language. Detection data stays on your device. Falls back to the standard summary when unavailable.")
+            }
+
             Section("App") {
                 LabeledContent("Version", value: appVersion)
                 NavigationLink {

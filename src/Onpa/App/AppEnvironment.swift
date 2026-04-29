@@ -8,6 +8,7 @@ struct AppEnvironment {
     let preferenceStore: any AppPreferenceStore
     let localCacheStore: any LocalCacheStore
     let diagnosticsService: any DiagnosticsService
+    let intelligenceService: any IntelligenceService
 
     static let live: AppEnvironment = {
         AppEnvironmentMigrator.migrateIfNeeded()
@@ -18,7 +19,8 @@ struct AppEnvironment {
             credentialStore: KeychainStationCredentialStore(),
             preferenceStore: UserDefaultsAppPreferenceStore(userDefaults: AppGroup.sharedDefaults),
             localCacheStore: FileSystemLocalCacheStore(rootDirectory: AppGroup.localCacheRootDirectory),
-            diagnosticsService: FileDiagnosticsService()
+            diagnosticsService: FileDiagnosticsService(),
+            intelligenceService: IntelligenceServiceFactory.make()
         )
     }()
 
@@ -29,7 +31,8 @@ struct AppEnvironment {
         credentialStore: KeychainStationCredentialStore(),
         preferenceStore: UserDefaultsAppPreferenceStore(key: "preview.preferences", userDefaults: .standard),
         localCacheStore: FileSystemLocalCacheStore(),
-        diagnosticsService: FileDiagnosticsService()
+        diagnosticsService: FileDiagnosticsService(),
+        intelligenceService: DisabledIntelligenceService()
     )
 }
 

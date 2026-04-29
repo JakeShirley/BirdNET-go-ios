@@ -14,6 +14,8 @@
 		8A3F3F622BD8000100A11001 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5D2BD8000100A11001 /* FeedView.swift */; };
 		8A3F3F632BD8000100A11001 /* SpeciesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */; };
 		8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F682BD8000100A11001 /* StatsView.swift */; };
+		8AD16E570100000100A11001 /* DailyDigestCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD16E570100000200A11001 /* DailyDigestCard.swift */; };
+		8AD16E570200000100A11001 /* IntelligenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD16E570200000200A11001 /* IntelligenceService.swift */; };
 		8A3F3F6B2BD8000100A11001 /* StationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F3F6A2BD8000100A11001 /* StationView.swift */; };
 		8A3F3F702BD8000100A11001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F3F6F2BD8000100A11001 /* Assets.xcassets */; };
 		8A3F40C22BD9000D00A11001 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F40C12BD9000D00A11001 /* CHANGELOG.md */; };
@@ -99,6 +101,8 @@
 		8A3F3F5D2BD8000100A11001 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		8A3F3F5E2BD8000100A11001 /* SpeciesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesView.swift; sourceTree = "<group>"; };
 		8A3F3F682BD8000100A11001 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		8AD16E570100000200A11001 /* DailyDigestCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDigestCard.swift; sourceTree = "<group>"; };
+		8AD16E570200000200A11001 /* IntelligenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntelligenceService.swift; sourceTree = "<group>"; };
 		8A3F3F6A2BD8000100A11001 /* StationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationView.swift; sourceTree = "<group>"; };
 		8A3F3F6F2BD8000100A11001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A3F40792BD9000100A11001 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 				8A3F40872BD9000100A11001 /* Domain */,
 				8A3F40892BD9000100A11001 /* Networking */,
 				8A3F408A2BD9000100A11001 /* Storage */,
+				8AD16E570200000300A11001 /* Services */,
 				8A3F3F542BD8000100A11001 /* Features */,
 				8A3F3F6E2BD8000100A11001 /* Resources */,
 			);
@@ -256,6 +261,7 @@
 			children = (
 				8A3F3F682BD8000100A11001 /* StatsView.swift */,
 				8A3F40B62BD9000A00A11001 /* StatsViewModel.swift */,
+				8AD16E570100000200A11001 /* DailyDigestCard.swift */,
 			);
 			path = Stats;
 			sourceTree = "<group>";
@@ -343,6 +349,14 @@
 				8A3F40AE2BD9000800A11001 /* DiagnosticsService.swift */,
 			);
 			path = Storage;
+			sourceTree = "<group>";
+		};
+		8AD16E570200000300A11001 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8AD16E570200000200A11001 /* IntelligenceService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		8A3F40A92BD9000600A11001 /* DetectionDetail */ = {
@@ -528,6 +542,8 @@
 				8A3F40BB2BD9000B00A11001 /* SpeciesDetailViewModel.swift in Sources */,
 				8A3F3F692BD8000100A11001 /* StatsView.swift in Sources */,
 				8A3F40B72BD9000A00A11001 /* StatsViewModel.swift in Sources */,
+				8AD16E570100000100A11001 /* DailyDigestCard.swift in Sources */,
+				8AD16E570200000100A11001 /* IntelligenceService.swift in Sources */,
 				8A3F3F6B2BD8000100A11001 /* StationView.swift in Sources */,
 				8A3F40BD2BD9000C00A11001 /* SettingsView.swift in Sources */,
 				8A3F40BF2BD9000C00A11001 /* SettingsViewModel.swift in Sources */,

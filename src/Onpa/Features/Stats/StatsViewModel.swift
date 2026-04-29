@@ -12,6 +12,18 @@ final class StatsViewModel: ObservableObject {
     @Published private(set) var statusKind: StatusKind = .neutral
     @Published private(set) var isLoading = false
     @Published private(set) var didLoad = false
+    /// Mirrors the user's "Generate Daily Summaries" preference so the
+    /// dashboard can decide whether to ask the IntelligenceService for
+    /// AI-rewritten copy. Reloaded on every dashboard refresh.
+    @Published private(set) var intelligenceEnabled = AppPreferences.defaults.enableIntelligenceSummaries
+    /// Best-effort detection totals for the day immediately before and (when
+    /// the selected day isn't today) immediately after the selected date.
+    /// Used by the Daily Digest to add comparison context. Either side may
+    /// be nil if the API hasn't responded yet, the request failed, or the
+    /// neighboring day doesn't make sense (e.g. "next day" when viewing
+    /// today). Reset to `.empty` at the start of every refresh so stale
+    /// neighbors never linger after the user pages to a new date.
+    @Published private(set) var neighborTotals: NeighborTotals = .empty
 
     private let summaryLimit = 40
     private let recentLimit = 20
@@ -45,6 +57,14 @@ final class StatsViewModel: ObservableObject {
     /// Re-reads the available profile list from the store.
     func reloadAvailableProfiles(environment: AppEnvironment) async {
         availableProfiles = (try? await environment.stationProfileStore.loadProfiles()) ?? []
+    }
+
+    /// Re-reads the user's intelligence-features preference. Failures are
+    /// silently ignored (the previously cached value remains in effect).
+    func reloadIntelligencePreference(environment: AppEnvironment) async {
+        if let preferences = try? await environment.preferenceStore.loadPreferences() {
+            intelligenceEnabled = preferences.enableIntelligenceSummaries
+        }
     }
 
     var selectedDateTitle: String {
@@ -87,6 +107,19 @@ final class StatsViewModel: ObservableObject {
         Array(recentDetections.prefix(3))
     }
 
+    /// Deterministic plain-language summary of the currently selected day,
+    /// derived entirely from already-loaded `dailySummary`. Returns nil while
+    /// the dashboard is loading its first batch so we don't flash an empty
+    /// card before any data has arrived.
+    var dailyDigest: DailyDigestStats? {
+        guard didLoad else { return nil }
+        return DailyDigestStats.make(
+            from: dailySummary,
+            selectedDate: selectedDate,
+            neighborTotals: neighborTotals
+        )
+    }
+
     func load(environment: AppEnvironment) async {
         guard !didLoad else {
             return
@@ -100,7 +133,13 @@ final class StatsViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
+        // Reset neighbor context up front so a slow neighbor fetch can never
+        // overwrite the day the user is currently looking at with stale
+        // numbers from a prior selection.
+        neighborTotals = .empty
+
         await reloadAvailableProfiles(environment: environment)
+        await reloadIntelligencePreference(environment: environment)
 
         do {
             guard let profile = try await loadStationProfile(environment: environment) else {
@@ -161,6 +200,7 @@ final class StatsViewModel: ObservableObject {
             }
 
             await cacheIgnoringErrors(DailySpeciesDashboard(date: selectedDateValue, summaries: analyticsSummary, recentDetections: recent), for: profile, environment: environment)
+            await loadNeighborTotals(for: profile, environment: environment)
         } catch {
             if Self.isCancellation(error) { return }
             if let profile = stationProfile {
@@ -250,6 +290,63 @@ final class StatsViewModel: ObservableObject {
     private func cache(_ dashboard: DailySpeciesDashboard, for profile: StationProfile, environment: AppEnvironment) async throws {
         let data = try encoder.encode(dashboard)
         try await environment.localCacheStore.saveData(data, for: cacheKey(for: profile))
+    }
+
+    /// Best-effort fetch of the previous day's (and, when applicable, the
+    /// next day's) detection totals to give the Daily Digest comparison
+    /// context. Failures are silently ignored — the digest just falls back
+    /// to "no comparison available". Both calls run in parallel; results
+    /// are only adopted if the user hasn't paged to a different selected
+    /// date in the meantime.
+    private func loadNeighborTotals(for profile: StationProfile, environment: AppEnvironment) async {
+        let calendar = Calendar.current
+        let originallySelected = selectedDate
+        guard let priorDate = calendar.date(byAdding: .day, value: -1, to: originallySelected) else {
+            return
+        }
+
+        let today = calendar.startOfDay(for: Date())
+        let nextDate: Date? = {
+            guard let candidate = calendar.date(byAdding: .day, value: 1, to: originallySelected) else {
+                return nil
+            }
+            // Only fetch the "next" day when it has actually happened — we
+            // never want to ask the API for a day in the future.
+            return candidate <= today ? candidate : nil
+        }()
+
+        let priorString = Self.apiDateFormatter.string(from: calendar.startOfDay(for: priorDate))
+        let nextString = nextDate.map { Self.apiDateFormatter.string(from: calendar.startOfDay(for: $0)) }
+
+        async let priorSummariesTask: [DailySpeciesSummary]? = try? await environment.apiClient.dailySpeciesSummary(
+            station: profile,
+            date: priorString,
+            limit: summaryLimit
+        )
+        async let nextSummariesTask: [DailySpeciesSummary]? = {
+            guard let nextString else { return nil }
+            return try? await environment.apiClient.dailySpeciesSummary(
+                station: profile,
+                date: nextString,
+                limit: summaryLimit
+            )
+        }()
+
+        let priorSummaries = await priorSummariesTask
+        let nextSummaries = await nextSummariesTask
+
+        // Discard the result if the user has paged to a different date while
+        // we were waiting; the next refresh will fetch the right neighbors.
+        guard selectedDate == originallySelected else { return }
+
+        neighborTotals = NeighborTotals(
+            priorDayTotal: priorSummaries.map(Self.totalDetections(in:)),
+            nextDayTotal: nextSummaries.map(Self.totalDetections(in:))
+        )
+    }
+
+    private static func totalDetections(in summaries: [DailySpeciesSummary]) -> Int {
+        summaries.reduce(0) { $0 + $1.count }
     }
 
     private func cacheIgnoringErrors(_ dashboard: DailySpeciesDashboard, for profile: StationProfile, environment: AppEnvironment) async {

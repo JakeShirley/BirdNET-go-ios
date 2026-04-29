@@ -5,6 +5,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var rememberStationCredentials = AppPreferences.defaults.rememberStationCredentials
     @Published var autoFetchSpectrograms = AppPreferences.defaults.autoFetchSpectrograms
     @Published var appearance = AppPreferences.defaults.appearance
+    @Published var enableIntelligenceSummaries = AppPreferences.defaults.enableIntelligenceSummaries
     @Published private(set) var statusMessage: String?
     @Published private(set) var statusSystemImage = "info.circle"
     @Published private(set) var isLoading = false
@@ -25,6 +26,7 @@ final class SettingsViewModel: ObservableObject {
             rememberStationCredentials = preferences.rememberStationCredentials
             autoFetchSpectrograms = preferences.autoFetchSpectrograms
             appearance = preferences.appearance
+            enableIntelligenceSummaries = preferences.enableIntelligenceSummaries
             UserDefaults.standard.set(preferences.appearance.rawValue, forKey: AppearancePreference.storageKey)
         } catch {
             setMessage(error.userFacingMessage, systemImage: "exclamationmark.triangle")
@@ -37,7 +39,8 @@ final class SettingsViewModel: ObservableObject {
                 AppPreferences(
                     rememberStationCredentials: rememberStationCredentials,
                     autoFetchSpectrograms: autoFetchSpectrograms,
-                    appearance: appearance
+                    appearance: appearance,
+                    enableIntelligenceSummaries: enableIntelligenceSummaries
                 )
             )
             UserDefaults.standard.set(appearance.rawValue, forKey: AppearancePreference.storageKey)
